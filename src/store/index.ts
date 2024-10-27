@@ -1,4 +1,4 @@
-import { reactive, shallowReactive, ref, inject, provide } from 'vue';
+import { reactive, shallowReactive, ref, inject, provide, shallowRef } from 'vue';
 import {
   CellType,
   type Column,
@@ -36,53 +36,6 @@ export type MergeInfoMap = Record<
   }
 >;
 
-export interface IUIProps {
-  border: boolean;
-  stripe: boolean;
-  showTreeLine: boolean;
-  showHeader: boolean;
-  selection: boolean;
-
-  showOverflow: '' | 'ellipsis' | 'tooltip';
-
-  highlightHoverRow: boolean;
-  highlightHoverCol: boolean;
-
-  highlightSelectRow: boolean;
-  highlightSelectCol: boolean;
-  highlightSelectCell: boolean;
-
-  defaultExpandAll: boolean;
-  headerRowClassName: (data: { row: Column[]; rowIndex: number }) => string;
-  headerRowStyle: (data: { row: Column[]; rowIndex: number }) => string;
-  headerCellClassName: (data: {
-    row: Column[];
-    column: Column;
-    rowIndex: number;
-    columnIndex: number;
-  }) => string;
-  headerCellStyle: (data: {
-    row: Column[];
-    column: Column;
-    rowIndex: number;
-    columnIndex: number;
-  }) => string;
-  rowClassName: (data: { row: ListItem; rowIndex: number }) => string;
-  rowStyle: (data: { row: ListItem; rowIndex: number }) => string;
-  cellClassName: (data: {
-    row: ListItem;
-    column: Column;
-    rowIndex: number;
-    columnIndex: number;
-  }) => string;
-  cellStyle: (data: {
-    row: ListItem;
-    column: Column;
-    rowIndex: number;
-    columnIndex: number;
-  }) => string;
-}
-
 export type ISelectionBorderPos =
   | 'left-top'
   | 'top'
@@ -109,7 +62,11 @@ export interface IColumnsRenderInfo {
   headerCellInfo: HeaderCellInfo;
 }
 
-const defaultUIProps: IUIProps = {
+const defaultGridOptions = {
+  rowKey: 'id',
+  rowMinHeight: 32,
+  merges: [] as MergeCell[],
+  groupConfig: [] as { columnId: string; sort: 'desc' | 'asc' }[],
   // TODO 看看要不要默认true好一点
   border: false,
   stripe: false,
@@ -133,13 +90,7 @@ const defaultUIProps: IUIProps = {
   cellStyle: () => '',
 };
 
-const defaultGridOptions = {
-  rowKey: 'id',
-  rowMinHeight: 32,
-  merges: [] as MergeCell[],
-  groupConfig: [] as { columnId: string; sort: 'desc' | 'asc' }[],
-  ...defaultUIProps,
-} as Required<TableOptions>;
+type GridState = Required<Pick<TableOptions, keyof typeof defaultGridOptions>>;
 
 export class GridStore {
   // 响应式数据
@@ -210,32 +161,7 @@ export class GridStore {
     },
   });
 
-  uiProps = shallowReactive<IUIProps>({
-    border: false,
-    stripe: false,
-    showTreeLine: false,
-    selection: false,
-    showHeader: true,
-
-    showOverflow: '',
-
-    highlightHoverRow: false,
-    highlightHoverCol: false,
-
-    highlightSelectRow: false,
-    highlightSelectCol: false,
-    highlightSelectCell: false,
-
-    defaultExpandAll: false,
-    headerRowClassName: () => '',
-    headerRowStyle: () => '',
-    headerCellClassName: () => '',
-    headerCellStyle: () => '',
-    rowClassName: () => '',
-    rowStyle: () => '',
-    cellClassName: () => '',
-    cellStyle: () => '',
-  });
+  readonly state = shallowRef<GridState>(defaultGridOptions as GridState);
 
   // TODO 区域框选要重新做
   interaction = shallowReactive<IInteractionProps>({
@@ -797,7 +723,7 @@ export class GridStore {
 
     const hasExpandCol = !!this.flattedColumns.find((col) => col.type === CellType.Expand);
 
-    const defaultExpandAll = this.getUIProps('defaultExpandAll');
+    const defaultExpandAll = this.getState('defaultExpandAll');
 
     this.gridRowMap = {};
 
@@ -823,7 +749,7 @@ export class GridStore {
         }
 
         if (hasExpandCol) {
-          expandMap[item.id] = defaultExpandAll;
+          expandMap[item.id] = !!defaultExpandAll;
           if (defaultExpandAll) {
             this.gridRowMap[`${item.id}-expand`] = { id: `${item.id}-expand`, type: 'expand' };
           }
@@ -1001,12 +927,13 @@ export class GridStore {
   }
 
   initOptions(options: TableOptions) {
-    const uiProps = assign(
+    const state = assign(
       {},
-      defaultUIProps,
-      pick(options, Object.keys(defaultUIProps)),
-    ) as IUIProps;
-    this.setUIProps(uiProps);
+      defaultGridOptions,
+      pick(options, Object.keys(defaultGridOptions)),
+    ) as GridState;
+
+    this.setState(state);
 
     this.setRowKey(options?.rowKey ?? defaultGridOptions.rowKey);
 
@@ -1021,16 +948,16 @@ export class GridStore {
     });
   }
 
-  // setUIProps<T extends keyof IUIProps>(key: T, value: IUIProps[T]) {
-  //   this.uiProps[key] = value;
-  // }
-
-  setUIProps(data: IUIProps) {
-    this.uiProps = { ...this.uiProps, ...data };
+  setState(data: GridState) {
+    this.state.value = data;
   }
 
-  getUIProps<T extends keyof IUIProps>(key: T): IUIProps[T] {
-    return this.uiProps[key];
+  setStateValue<T extends keyof GridState>(key: T, value: GridState[T]) {
+    this.state.value[key] = value;
+  }
+
+  getState<T extends keyof GridState>(key: T) {
+    return this.state.value[key]!;
   }
 
   handleSelectionChange = (
@@ -1271,7 +1198,7 @@ export class GridStore {
   }
 
   getSelectionClass(rowIndex: number, column: Column) {
-    if (!this.getUIProps('selection')) {
+    if (!this.getState('selection')) {
       return '';
     }
 

@@ -19,7 +19,7 @@ export class GridSelection {
     rowIndex: -1,
     colIndex: -1,
   };
-  
+
   lastClickPos?: { rowIndex: number; colIndex: number } = undefined;
   lastShiftClickPos?: { rowIndex: number; colIndex: number } = undefined;
 
@@ -27,10 +27,8 @@ export class GridSelection {
 
   isMetaKey = false;
   isShiftKey = false;
-  
-  constructor(private store: GridStore) {
-    
-  }
+
+  constructor(private store: GridStore) {}
 
   init(el: HTMLElement) {
     this.container = el;
@@ -41,9 +39,7 @@ export class GridSelection {
     this.callbackFunc = fn;
   }
 
-  reset() {
-
-  }
+  reset() {}
 
   preventContextMenu = (e: MouseEvent) => {
     e.preventDefault();
@@ -51,7 +47,7 @@ export class GridSelection {
   };
 
   onMousedown = (e: MouseEvent) => {
-    if (!this.store.getUIProps('selection')) return;
+    if (!this.store.getState('selection')) return;
     // 禁用右键响应
     if (e.buttons !== 1 || e.button) return;
     const cellInfo = getCellFromEvent(e);
@@ -66,14 +62,14 @@ export class GridSelection {
       this.startPos = {
         rowIndex,
         colIndex,
-      }
+      };
 
       if (this.isShiftKey) {
         if (!this.lastShiftClickPos) {
           this.lastShiftClickPos = cloneDeep(this.lastClickPos || this.startPos);
         }
       } else {
-        this.lastShiftClickPos = undefined
+        this.lastShiftClickPos = undefined;
       }
 
       if (this.isShiftKey && this.lastShiftClickPos) {
@@ -83,14 +79,14 @@ export class GridSelection {
           bottom: Math.max(rowIndex, ri),
           left: Math.min(colIndex, ci),
           right: Math.max(colIndex, ci),
-        }
+        };
       } else {
         this.boxArea = {
           top: rowIndex,
           bottom: rowIndex,
           left: colIndex,
           right: colIndex,
-        }
+        };
       }
 
       this.lastClickPos = cloneDeep(this.startPos);
@@ -105,7 +101,7 @@ export class GridSelection {
   };
 
   onMouseOver = (e: MouseEvent) => {
-    if (!this.store.getUIProps('selection')) return;
+    if (!this.store.getState('selection')) return;
     const cellInfo = getCellFromEvent(e);
 
     if (cellInfo) {
@@ -116,24 +112,24 @@ export class GridSelection {
         bottom: Math.max(this.startPos.rowIndex, rowIndex),
         left: Math.min(this.startPos.colIndex, colIndex),
         right: Math.max(this.startPos.colIndex, colIndex),
-      }
+      };
 
       if (!isEqual(newArea, this.boxArea)) {
         this.boxArea = newArea;
         this.emitChange();
       }
     }
-  }
+  };
 
   onMouseup = () => {
-    if (!this.store.getUIProps('selection')) return;
+    if (!this.store.getState('selection')) return;
     this.id = '';
     this.boxArea = {
       left: 0,
       top: 0,
       right: 0,
       bottom: 0,
-    }
+    };
     this.container!.style.userSelect = 'auto';
     document.body.removeEventListener('mouseover', this.onMouseOver);
     document.body.removeEventListener('mouseup', this.onMouseup);

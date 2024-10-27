@@ -135,7 +135,7 @@ const fullRow = leftFixedHeaderColumns.value[props.headerRowIndex].concat(
 );
 
 const getRowClass = () => {
-  const fn = gridStore.getUIProps('headerRowClassName');
+  const fn = gridStore.getState('headerRowClassName');
   if (fn) {
     return fn({
       row: fullRow,
@@ -145,7 +145,7 @@ const getRowClass = () => {
 };
 
 const getRowStyle = () => {
-  const fn = gridStore.getUIProps('headerRowStyle');
+  const fn = gridStore.getState('headerRowStyle');
   if (fn) {
     return fn({
       row: fullRow,
@@ -155,7 +155,7 @@ const getRowStyle = () => {
 };
 
 const getCellClass = (column: ColumnItem) => {
-  const fn = gridStore.getUIProps('headerCellClassName');
+  const fn = gridStore.getState('headerCellClassName');
   if (fn) {
     return fn({
       row: props.currentColumn,
@@ -167,7 +167,7 @@ const getCellClass = (column: ColumnItem) => {
 };
 
 const getCellStyle = (column: ColumnItem) => {
-  const fn = gridStore.getUIProps('headerCellStyle');
+  const fn = gridStore.getState('headerCellStyle');
   if (fn) {
     return fn({
       row: props.currentColumn,

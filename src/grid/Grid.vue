@@ -26,7 +26,7 @@
           data-id="stickyHeader"
           class="vtg-header"
           :style="`height: ${headerHeight}px;`"
-          v-if="gridStore.getUIProps('showHeader')"
+          v-if="gridStore.getState('showHeader')"
         >
           <GridHeader></GridHeader>
         </thead>
@@ -147,8 +147,8 @@ const gridStore = useGridStore(props);
 
 // 如果有分组优先判断分组信息
 const isEmpty = computed(() => {
-  return props.options?.groupConfig?.length
-    ? gridStore.groupFoldConstructor(props.list, props.options.groupConfig).length === 0
+  return gridStore.getState('groupConfig')?.length
+    ? gridStore.groupFoldConstructor(props.list, gridStore.getState('groupConfig')).length === 0
     : props.list.length === 0;
 });
 
@@ -158,6 +158,7 @@ watch(
     console.log('groupConfig', nv);
     if (!nv) return;
     const list = gridStore.groupFoldConstructor(props.list, nv);
+    gridStore.setStateValue('groupConfig', nv);
     console.log('groupConfig', list);
     gridStore.initDataList(list);
   },
@@ -230,11 +231,11 @@ function getComponent(row: ListItem) {
 
 const cls = computed(() => ({
   body: [
-    gridStore.getUIProps('border') ? 'vtg-main--border' : '',
-    gridStore.getUIProps('highlightHoverRow') ? 'vtg-main--highlight-hover-row' : '',
-    gridStore.getUIProps('highlightSelectRow') ? 'vtg-main--highlight-select-row' : '',
-    gridStore.getUIProps('highlightSelectCol') ? 'vtg-main--highlight-select-col' : '',
-    gridStore.getUIProps('highlightSelectCell') ? 'vtg-main--highlight-select-cell' : '',
+    gridStore.getState('border') ? 'vtg-main--border' : '',
+    gridStore.getState('highlightHoverRow') ? 'vtg-main--highlight-hover-row' : '',
+    gridStore.getState('highlightSelectRow') ? 'vtg-main--highlight-select-row' : '',
+    gridStore.getState('highlightSelectCol') ? 'vtg-main--highlight-select-col' : '',
+    gridStore.getState('highlightSelectCell') ? 'vtg-main--highlight-select-cell' : '',
   ],
   table: ['vtg-table', gridStore.gridScrollingStatus.value],
   leftFixedShadow: [

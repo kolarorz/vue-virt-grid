@@ -36,7 +36,7 @@ export default defineComponent({
     const maxHeight = computed(() => gridStore.watchData.rowHeightMap.get(String(props.row.id)));
 
     const getCellStyle = (column: ColumnItem) => {
-      const fn = gridStore.getUIProps('cellStyle');
+      const fn = gridStore.getState('cellStyle');
       if (fn) {
         return fn({
           row: props.row,
@@ -90,7 +90,7 @@ export default defineComponent({
     const selectColId = computed(() => gridStore.getSelectCol());
 
     const getRowClass = () => {
-      const fn = gridStore.getUIProps('rowClassName');
+      const fn = gridStore.getState('rowClassName');
       if (fn) {
         return fn({
           row: props.row,
@@ -100,7 +100,7 @@ export default defineComponent({
     };
 
     const getCellClass = (column: ColumnItem) => {
-      const fn = gridStore.getUIProps('cellClassName');
+      const fn = gridStore.getState('cellClassName');
       if (fn) {
         return fn({
           row: props.row,
@@ -112,7 +112,7 @@ export default defineComponent({
     };
 
     const getRowStyle = () => {
-      const fn = gridStore.getUIProps('rowStyle');
+      const fn = gridStore.getState('rowStyle');
       if (fn) {
         return fn({
           row: props.row,
@@ -134,7 +134,7 @@ export default defineComponent({
       leftPadding: () => ['vtg-td'],
       main: (column: ColumnItem) => [
         'vtg-td',
-        gridStore.getUIProps('showOverflow') && `overflow-${gridStore.getUIProps('showOverflow')}`,
+        gridStore.getState('showOverflow') && `overflow-${gridStore.getState('showOverflow')}`,
         column._id === selectColId.value && 'current-column',
         gridStore.getSelectionClass(props.rowIndex, column),
         getCellClass(column),
@@ -152,7 +152,7 @@ export default defineComponent({
       ],
       row: () => [
         'vtg-tr',
-        gridStore.getUIProps('stripe') && props.rowIndex % 2 && 'vtg-tr--striped',
+        gridStore.getState('stripe') && props.rowIndex % 2 && 'vtg-tr--striped',
         props.row.id === selectRowId.value && 'current-row',
         getRowClass(),
       ],
