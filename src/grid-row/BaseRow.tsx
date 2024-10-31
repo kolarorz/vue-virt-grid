@@ -191,12 +191,12 @@ export default defineComponent({
         tds.push(
           <td
             key={`${watchData.renderKey}-${rowIndex}-${colIndex}`}
-            data-colidx={colIndex}
-            data-rowidx={rowIndex}
             class={cls.leftFixed(column)}
             style={`text-align: ${column.align}; left: ${
               headerCellInfo[column._id].fixOffset
             }px; ${getCellStyle(column)}`}
+            data-rowidx={rowIndex}
+            data-colidx={colIndex}
           >
             {getRenderCell({
               row: row,
@@ -212,10 +212,10 @@ export default defineComponent({
       tds.push(
         <td
           key={`${watchData.renderKey}-${rowIndex}-lp`}
-          data-colidx="lp"
-          data-rowidx={rowIndex}
           class={'vtg-td'}
           style={`height: ${maxHeight}px`}
+          data-rowidx={rowIndex}
+          data-colidx="lp"
           rowspan={1}
           colspan={watchData.renderRect.xs}
         ></td>,
@@ -231,18 +231,14 @@ export default defineComponent({
         getMergeInfo(merges, rowIndex, colIndex) ??
         undefined;
 
-      // console.log(rowIndex, colIndex);
-
-      // console.log('mergeInfo', mergeInfo, rowIndex, colIndex);
-
       if (mergeInfo === undefined) {
         // 无合并单元格
         tds.push(
           <td
             key={`${watchData.renderKey}-${rowIndex}-${actualColIndex}`}
-            data-colidx={actualColIndex}
-            data-rowidx={rowIndex}
             class={cls.main(column)}
+            data-rowidx={rowIndex}
+            data-colidx={actualColIndex}
           >
             {/* <TextCell rowIndex={rowIndex} row={row} column={column}></TextCell> */}
             {getRenderCell({
@@ -254,17 +250,17 @@ export default defineComponent({
         );
       } else if (mergeInfo.rowIndex === rowIndex && mergeInfo.colIndex === colIndex) {
         // 只渲染合并单元格主体
-        const colspan = mergeInfo?.colspan ?? 1;
         const rowspan = mergeInfo?.rowspan ?? 1;
+        const colspan = mergeInfo?.colspan ?? 1;
 
         tds.push(
           <td
             key={`${watchData.renderKey}-${rowIndex}-${actualColIndex}`}
-            data-colidx={actualColIndex}
-            data-rowidx={rowIndex}
             class={cls.main(column)}
-            colspan={colspan}
+            data-rowidx={rowIndex}
+            data-colidx={actualColIndex}
             rowspan={rowspan}
+            colspan={colspan}
           >
             {/* <TextCell rowIndex={rowIndex} row={row} column={column}></TextCell> */}
             {getRenderCell({
@@ -284,10 +280,10 @@ export default defineComponent({
       tds.push(
         <td
           key={`${watchData.renderKey}-${rowIndex}-rp`}
-          data-colidx="rp"
-          data-rowidx={rowIndex}
           class={'vtg-td'}
           style={`height: ${maxHeight}px`}
+          data-rowidx={rowIndex}
+          data-colidx="rp"
           rowspan={1}
           // todo why 要减去右侧length呢
           colspan={
@@ -304,12 +300,12 @@ export default defineComponent({
         tds.push(
           <td
             key={`${watchData.renderKey}-${rowIndex}-${actualColIndex}`}
-            data-colidx={actualColIndex}
-            data-rowidx={rowIndex}
             class={cls.rightFixed(column)}
             style={`text-align: ${column.align}; right: ${
               headerCellInfo[column._id].fixOffset
             }px; ${getCellStyle(column)}`}
+            data-rowidx={rowIndex}
+            data-colidx={actualColIndex}
           >
             {getRenderCell({
               row: row,

@@ -93,6 +93,11 @@ const defaultGridOptions = {
 type GridState = Required<Pick<TableOptions, keyof typeof defaultGridOptions>>;
 
 export class GridStore {
+  // 根元素
+  rootEl: HTMLElement | null = null;
+  // client
+  clientEl: HTMLElement | null = null;
+
   // 响应式数据
   watchData = reactive({
     // 强制渲染
@@ -212,7 +217,7 @@ export class GridStore {
 
   gridScrollingStatus = ref('is-scrolling-none');
 
-  tableRootEl: HTMLElement | undefined;
+  tableEl: HTMLElement | undefined;
   virtualListRef: VirtListReturn<ListItem<Record<string, string>>> | undefined;
 
   gridRowMap: Record<string, ListItem> = {};
@@ -381,7 +386,7 @@ export class GridStore {
             rowIndex: rowIndexLast,
             colIndex: colIndex + colspan,
             rowspan: rowspanLast,
-            colspan: colIndexLast + colspanLast - colIndex - colspan,
+            colspan: colIndexLast + colspanLast - 1 - (colIndex + colspan - 1),
           });
         }
       });
@@ -425,10 +430,12 @@ export class GridStore {
         }
         // 中间，中间可能有可能无
         if (colIndex > colIndexLast) {
+          // TODO 要把其他顶点的都处理一下
+          // 顶点单元格独特处理
           placeCells2Left.push({
-            rowIndex: rowIndex,
+            rowIndex: rowIndex < rowIndexLast ? rowIndexLast : rowIndex,
             colIndex: colIndexLast,
-            rowspan: rowspan,
+            rowspan: rowIndex < rowIndexLast ? rowIndexLast - rowIndex : rowspan,
             colspan: colIndex - colIndexLast,
           });
         }
@@ -437,7 +444,7 @@ export class GridStore {
           placeCells2Left.push({
             rowIndex: rowIndex + rowspan,
             colIndex: colIndexLast,
-            rowspan: rowIndexLast + rowspanLast - rowIndex - rowspan,
+            rowspan: rowIndexLast + rowspanLast - 1 - (rowIndex + rowspan - 1),
             colspan: colspanLast,
           });
         }
@@ -485,7 +492,7 @@ export class GridStore {
             rowIndex: rowIndex,
             colIndex: colIndex + colspan,
             rowspan: rowspan,
-            colspan: colIndexLast + colspanLast - colIndex - colspan,
+            colspan: colIndexLast + colspanLast - 1 - (colIndex + colspan - 1),
           });
         }
         // 下边可能也不存在
@@ -493,7 +500,7 @@ export class GridStore {
           placeCells2Right.push({
             rowIndex: rowIndex + rowspan,
             colIndex: colIndexLast,
-            rowspan: rowIndexLast + rowspanLast - rowIndex - rowspan,
+            rowspan: rowIndexLast + rowspanLast - 1 - (rowIndex + rowspan - 1),
             colspan: colspanLast,
           });
         }
@@ -567,6 +574,7 @@ export class GridStore {
 
     // console.log('tempMerges', this.tempMerges);
 
+    // console.warn(`oys: ${oys} oye: ${oye} oxs: ${oxs} oxe: ${oxe}`);
     // console.warn(`rys: ${rys} rye: ${rye} rxs: ${rxs} rxe: ${rxe}`);
     // 生成占位单元格信息，用于渲染优化
 
@@ -600,6 +608,14 @@ export class GridStore {
 
   setRowMinHeight(rowMinHeight: number) {
     this.virtualListProps.minSize = rowMinHeight;
+  }
+
+  setRootEl(rootEl: HTMLElement | null) {
+    this.rootEl = rootEl;
+  }
+
+  setClientEl(clientEl: HTMLElement | null) {
+    this.clientEl = clientEl;
   }
 
   setColumns(columns: Column[]) {
@@ -677,8 +693,8 @@ export class GridStore {
     this.originList = list;
   }
 
-  setTableRootEl(el: HTMLElement) {
-    this.tableRootEl = el;
+  setTableEl(el: HTMLElement) {
+    this.tableEl = el;
   }
 
   getCheckboxRows() {
@@ -1234,6 +1250,11 @@ export class GridStore {
     this.selectColId.value = this.flattedColumns[colIndex]._id;
   }
 
+  clearSelect() {
+    this.selectRowId.value = '';
+    this.selectColId.value = '';
+  }
+
   setRowSelection(
     areaId = nanoid(4),
     startRowIndex: number,
@@ -1317,7 +1338,7 @@ export class GridStore {
       colRenderBegin !== this.watchData.originRect.xs ||
       colRenderEnd !== this.watchData.originRect.xe
     ) {
-      console.warn('横向计算结束', colRenderBegin, colRenderEnd);
+      // console.warn('横向计算结束', colRenderBegin, colRenderEnd);
 
       this.watchData.originRect.xs = colRenderBegin;
       this.watchData.originRect.xe = colRenderEnd;

@@ -31,7 +31,7 @@ export const clearResizeLine = () => {
 export function useResizeColumn(
   columnEl: HTMLElement,
   headerInfo: ColumnItem,
-  tableRootEl: HTMLElement,
+  tableEl: HTMLElement,
   cb: (width: number) => void,
 ) {
   if (isInitialized(columnEl)) return;
@@ -75,22 +75,22 @@ export function useResizeColumn(
   // let resizeLine: HTMLElement | undefined;
 
   function setupResizeLine(e: MouseEvent) {
-    if (!tableRootEl) return;
+    if (!tableEl) return;
     data.startX = e.clientX;
     data.columnLeft =
-      tableRootEl.scrollLeft +
+      tableEl.scrollLeft +
       columnEl.getBoundingClientRect().left -
-      tableRootEl.getBoundingClientRect().x -
+      tableEl.getBoundingClientRect().x -
       2;
     data.endX = e.clientX;
     data.columnCurrentWidth = columnEl.getBoundingClientRect().width;
 
     resizeLine = document.createElement('div');
     resizeLine.className = ColumnResizeLineClass;
-    tableRootEl.appendChild(resizeLine);
-    setRelative(tableRootEl);
+    tableEl.appendChild(resizeLine);
+    setRelative(tableEl);
     resizeLine.style.transform = `translateX(${getWillWidth() + data.columnLeft}px)`;
-    resizeLine.style.top = `${tableRootEl.scrollTop}px`;
+    resizeLine.style.top = `${tableEl.scrollTop}px`;
   }
 
   function resize(e: MouseEvent) {

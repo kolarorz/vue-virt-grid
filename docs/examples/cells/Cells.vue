@@ -68,7 +68,7 @@ const columns: Column[] = [
     title: '加载element-plus组件',
     width: 200,
     cellCoverRender: (column: Column, row: ListItem, tdData: any) => (
-      <ElSelect placeholder="Select" size="small" style="width: 100%">
+      <ElSelect placeholder="Select" size="large" style="width: 100%">
         <ElOption label="11" value="11" />
         <ElOption label="22" value="22" />
       </ElSelect>
@@ -363,11 +363,20 @@ const columns: Column[] = [
     width: 200,
     cellRender: () => <LinkView />,
   },
-  // {
-  //   field: 'formula',
-  //   title: 'Formula',
-  //   width: 100,
-  // },
+  {
+    field: 'select111',
+    title: '自定义渲染',
+    width: 200,
+    cellRender: (column: Column, row: ListItem) => <SelectView column={column} row={row} />,
+    // 单击渲染
+    cellCoverRender: (column: Column, row: ListItem, tdData: any) => (
+      <SelectCover column={column} row={row} tdData={tdData} />
+    ),
+    // 双击渲染
+    cellDropdownRender: (column: Column, row: ListItem, tdData: any) => (
+      <SelectDropdown column={column} row={row} tdData={tdData} />
+    ),
+  },
 ];
 const list: ListItem[] = generateList(columns, 200);
 

@@ -1,6 +1,6 @@
 <template>
-  <div class="vtg-root" ref="rootRefEl">
-    <div class="vtg-main" ref="clientRefEl" data-id="client" :class="cls.body">
+  <div class="vtg-root" :class="cls.root" ref="rootRefEl">
+    <div class="vtg-client" ref="clientRefEl" data-id="client" :class="cls.main">
       <!-- height skeleton -->
       <div :style="`float:left; height: ${vlReactiveData.listTotalSize}px`"></div>
       <!-- table main -->
@@ -230,8 +230,9 @@ function getComponent(row: ListItem) {
 }
 
 const cls = computed(() => ({
-  body: [
-    gridStore.getState('border') ? 'vtg-main--border' : '',
+  root: [gridStore.getState('border') ? 'vtg-main--border' : ''],
+  main: [
+    // gridStore.getState('border') ? 'vtg-main--border' : '',
     gridStore.getState('highlightHoverRow') ? 'vtg-main--highlight-hover-row' : '',
     gridStore.getState('highlightSelectRow') ? 'vtg-main--highlight-select-row' : '',
     gridStore.getState('highlightSelectCol') ? 'vtg-main--highlight-select-col' : '',
@@ -262,9 +263,16 @@ onMounted(() => {
     const { scrollLeft, scrollWidth, clientWidth } = clientRefEl.value as HTMLElement;
     gridStore.calcVisibleColumns(scrollLeft, clientWidth);
     calcFixedShadow(scrollLeft, scrollWidth, clientWidth);
+
+    gridStore.setClientEl(clientRefEl.value);
   }
-  if (tableRefEl.value) gridStore.setTableRootEl(tableRefEl.value);
-  if (rootRefEl.value) gridStore.initSelectionElement(rootRefEl.value);
+  if (rootRefEl.value) {
+    gridStore.initSelectionElement(rootRefEl.value);
+    gridStore.setRootEl(rootRefEl.value);
+  }
+  if (tableRefEl.value) {
+    gridStore.setTableEl(tableRefEl.value);
+  }
 
   //初始化事件做监听
   for (const key of Object.values({

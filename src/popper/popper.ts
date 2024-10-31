@@ -133,18 +133,18 @@ export const createPopper = ({
   mountEl,
   popperContainer,
   popper,
-  options,
+  isCover = true,
 }: {
   reference: HTMLElement;
   popperContainer: HTMLElement;
   mountEl: HTMLElement;
   popper: HTMLElement | App;
-  options?: Options;
+  isCover: boolean;
 }) => {
   if (!reference || !popper) {
     return;
   }
-  console.log('createPopper', reference, popper, options);
+  console.log('createPopper', reference, popper);
 
   let popperEl = null;
   if (popper instanceof HTMLElement) {
@@ -173,35 +173,62 @@ export const createPopper = ({
   } = mountEl.getBoundingClientRect();
 
   popperContainer.innerHTML = '';
-  if (options?.placement === 'bottom-start') {
+  if (isCover) {
+    // center
+    const left = referenceLeft - mountElLeft + scrollLeft - 1;
+    const top = referenceTop - mountElTop + scrollTop - 1;
+    popperContainer.style.left = `${left}px`;
+    popperContainer.style.top = `${top}px`;
+    popperContainer.style.width = `${referenceWidth + 1}px`;
+    popperContainer.style.minHeight = `${referenceHeight + 1}px`;
+  } else {
     popperContainer.style.left = `${referenceLeft - mountElLeft + scrollLeft - 2}px`;
     popperContainer.style.top = `${referenceTop - mountElTop + referenceHeight + scrollTop + 2}px`;
     // popperContainer.style.width = `${width - 1}px`;
     // popperContainer.style.height = `${height - 1}px`;
-
-    // TODO 检测越界
-    console.log('检测越界', mountEl.getBoundingClientRect());
-  } else {
-    // center
-    popperContainer.style.left = `${referenceLeft - mountElLeft + scrollLeft - 2}px`;
-    popperContainer.style.top = `${referenceTop - mountElTop + scrollTop - 2}px`;
-    popperContainer.style.width = `${referenceWidth + 1}px`;
-    popperContainer.style.height = `${referenceHeight + 1}px`;
   }
 
-  mountEl.appendChild(popperContainer);
   popperContainer.appendChild(popperEl);
+  mountEl.appendChild(popperContainer);
 
-  // 移除popper
-  setTimeout(() => {
-    document.addEventListener('click', (evt: MouseEvent) => {
-      const popper = (evt.composedPath() as HTMLElement[]).find(
-        (el: HTMLElement) =>
-          el?.classList?.contains('vtg-popper-container') || el?.classList?.contains('vtg-td'),
-      );
-      if (!popper) {
-        mountEl.removeChild(popperContainer);
-      }
-    });
-  }, 500);
+  // append 结束后需要检测越界
+
+  if (isCover) {
+    const diff =
+      popperContainer.getBoundingClientRect().bottom - mountEl.getBoundingClientRect().bottom;
+    if (diff > 0) {
+      const scrollbarHeight = mountEl.offsetHeight - mountEl.clientHeight;
+      // 修改定位
+      popperContainer.style.top = `${referenceTop - mountElTop + scrollTop - 1 - diff - scrollbarHeight}px`;
+    }
+  } else {
+    // 检测下方越界
+    const diffBottom =
+      popperContainer.getBoundingClientRect().bottom - mountEl.getBoundingClientRect().bottom;
+    if (diffBottom > 0) {
+      // const scrollbarHeight = mountEl.offsetHeight - mountEl.clientHeight;
+      // 修改定位
+      popperContainer.style.top = `${referenceTop - mountElTop + referenceHeight + scrollTop + 2 - popperContainer.getBoundingClientRect().height - reference.getBoundingClientRect().height - 4}px`;
+    }
+    // 检测右边越界
+    const diffRight =
+      popperContainer.getBoundingClientRect().right - mountEl.getBoundingClientRect().right;
+    if (diffRight > 0) {
+      const scrollbarWidth = mountEl.offsetWidth - mountEl.clientWidth;
+      // 修改定位
+      popperContainer.style.left = `${referenceLeft - mountElLeft + scrollLeft - 2 - diffRight - scrollbarWidth}px`;
+    }
+  }
+
+  function toggleRender() {
+    if (mountEl.contains(popperContainer)) {
+      mountEl.removeChild(popperContainer);
+    } else {
+      mountEl.appendChild(popperContainer);
+    }
+  }
+
+  return {
+    toggleRender,
+  };
 };

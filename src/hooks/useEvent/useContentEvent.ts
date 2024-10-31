@@ -116,6 +116,20 @@ export const useContentEvent = (gridStore: GridStore) => {
     const tdData = checkAndGetTdInfo(e, gridStore);
     gridStore.popperStore.coverRender(tdData);
   };
+
+  // 添加一个全局的事件监听，用于删除弹出层和选中单元格
+  document.addEventListener('mousedown', (evt: MouseEvent) => {
+    const popper = (evt.composedPath() as HTMLElement[]).find(
+      (el: HTMLElement) =>
+        el?.classList?.contains('vtg-popper-container') || el?.classList?.contains('vtg-td'),
+    );
+    if (!popper) {
+      gridStore.clearSelect();
+      // console.log('clearSelect');
+      gridStore.popperStore.remove();
+    }
+  });
+
   return {
     onClick,
     onDblclick,

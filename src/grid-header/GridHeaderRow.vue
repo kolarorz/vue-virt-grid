@@ -187,7 +187,7 @@ onUpdated(() => {
     useResizeColumn(
       item as HTMLElement,
       headerCellInfo.value[colId]!,
-      gridStore.tableRootEl!,
+      gridStore.tableEl!,
       (width) => {
         if (colId) gridStore.setColumnWidth(colId, width);
       },

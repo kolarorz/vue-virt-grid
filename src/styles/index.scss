@@ -50,36 +50,46 @@
   overflow: hidden;
   position: relative;
   -webkit-font-smoothing: antialiased;
+  border: 1px solid transparent;
+
+  // 放在这里popper的计算才会正确
+  &.vtg-root--border {
+    border-color: var(--#{$prefix}-border-color);
+    th.vtg-th {
+      border-color: var(--#{$prefix}-border-color);
+    }
+    td.vtg-td {
+      border-color: var(--#{$prefix}-border-color);
+    }
+  }
 
   @include reset;
   @include scrollbar;
 }
 
 // 主体容器
-.vtg-main {
+.vtg-client {
   width: 100%;
   height: 100%;
   overflow: auto;
   position: relative;
   font-size: 14px;
-  border: 1px solid transparent;
+  // box-sizing: padding-box;
 
   // 边框样式
-  &.vtg-main--border {
-    border-color: var(--#{$prefix}-border-color);
-
-    th.vtg-th {
-      border-color: var(--#{$prefix}-border-color);
-    }
-
-    td.vtg-td {
-      border-color: var(--#{$prefix}-border-color);
-    }
-  }
+  // &.vtg-client--border {
+  //   border-color: var(--#{$prefix}-border-color);
+  //   th.vtg-th {
+  //     border-color: var(--#{$prefix}-border-color);
+  //   }
+  //   td.vtg-td {
+  //     border-color: var(--#{$prefix}-border-color);
+  //   }
+  // }
 
   // highlight
   // hover
-  &.vtg-main--highlight-hover-row {
+  &.vtg-client--highlight-hover-row {
     tr.vtg-tr:hover {
       & > td.vtg-td {
         background-color: var(--#{$prefix}-row-hover-bg-color);
@@ -87,19 +97,19 @@
     }
   }
   // select
-  &.vtg-main--highlight-select-row {
+  &.vtg-client--highlight-select-row {
     tr.vtg-tr.current-row {
       td.vtg-td {
         background-color: var(--#{$prefix}-current-row-bg-color);
       }
     }
   }
-  &.vtg-main--highlight-select-col {
+  &.vtg-client--highlight-select-col {
     td.vtg-td.current-column {
       background-color: var(--#{$prefix}-current-column-bg-color);
     }
   }
-  &.vtg-main--highlight-select-cell {
+  &.vtg-client--highlight-select-cell {
     tr.vtg-tr.current-row td.vtg-td.current-column {
       position: relative;
 
@@ -536,6 +546,9 @@ tbody.vtg-body {
   z-index: 5;
   position: absolute;
   background-color: #fff;
+}
+
+.vtg-popper-container--cover {
   border: 2px solid var(--#{$prefix}-select-border-color);
 }
 

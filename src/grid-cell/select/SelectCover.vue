@@ -54,7 +54,7 @@ const props = defineProps({
 .vtg-cell__select-cover {
   width: 100%;
   height: 100%;
-  background-color: cyan;
+  background-color: #fff;
   position: relative;
   z-index: 99;
   user-select: none;
