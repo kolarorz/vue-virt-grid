@@ -230,13 +230,12 @@ function getComponent(row: ListItem) {
 }
 
 const cls = computed(() => ({
-  root: [gridStore.getState('border') ? 'vtg-main--border' : ''],
+  root: [gridStore.getState('border') ? 'vtg-root--border' : ''],
   main: [
-    // gridStore.getState('border') ? 'vtg-main--border' : '',
-    gridStore.getState('highlightHoverRow') ? 'vtg-main--highlight-hover-row' : '',
-    gridStore.getState('highlightSelectRow') ? 'vtg-main--highlight-select-row' : '',
-    gridStore.getState('highlightSelectCol') ? 'vtg-main--highlight-select-col' : '',
-    gridStore.getState('highlightSelectCell') ? 'vtg-main--highlight-select-cell' : '',
+    gridStore.getState('highlightHoverRow') ? 'vtg-client--highlight-hover-row' : '',
+    gridStore.getState('highlightSelectRow') ? 'vtg-client--highlight-select-row' : '',
+    gridStore.getState('highlightSelectCol') ? 'vtg-client--highlight-select-col' : '',
+    gridStore.getState('highlightSelectCell') ? 'vtg-client--highlight-select-cell' : '',
   ],
   table: ['vtg-table', gridStore.gridScrollingStatus.value],
   leftFixedShadow: [

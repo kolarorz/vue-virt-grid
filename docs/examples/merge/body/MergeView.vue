@@ -7,6 +7,8 @@
         :options="{
           merges: merges,
           border: true,
+          highlightSelectCol: true,
+          highlightSelectRow: true,
         }"
       ></Grid>
     </div>
@@ -188,6 +190,52 @@ const merges = [
   { rowIndex: 9, colIndex: 0, rowspan: 1, colspan: 15 },
 
   { rowIndex: 11, colIndex: 5, rowspan: 4, colspan: 12 },
+
+  // 新增一些
+  { rowIndex: 16, colIndex: 0, rowspan: 4, colspan: 2 },
+  { rowIndex: 16, colIndex: 2, rowspan: 4, colspan: 1 },
+  { rowIndex: 16, colIndex: 3, rowspan: 4, colspan: 1 },
+  { rowIndex: 16, colIndex: 6, rowspan: 4, colspan: 1 },
+  { rowIndex: 16, colIndex: 7, rowspan: 4, colspan: 1 },
+  { rowIndex: 16, colIndex: 8, rowspan: 4, colspan: 1 },
+  { rowIndex: 16, colIndex: 9, rowspan: 4, colspan: 1 },
+  { rowIndex: 16, colIndex: 17, rowspan: 4, colspan: 1 },
+  { rowIndex: 16, colIndex: 18, rowspan: 3, colspan: 1 },
+  { rowIndex: 16, colIndex: 19, rowspan: 3, colspan: 1 },
+  { rowIndex: 16, colIndex: 20, rowspan: 3, colspan: 2 },
+  { rowIndex: 16, colIndex: 4, rowspan: 2, colspan: 2 },
+  { rowIndex: 16, colIndex: 11, rowspan: 2, colspan: 4 },
+  { rowIndex: 16, colIndex: 18, rowspan: 1, colspan: 4 },
+
+  { rowIndex: 24, colIndex: 0, rowspan: 4, colspan: 2 },
+  { rowIndex: 24, colIndex: 2, rowspan: 4, colspan: 1 },
+  { rowIndex: 24, colIndex: 3, rowspan: 4, colspan: 1 },
+  { rowIndex: 24, colIndex: 6, rowspan: 4, colspan: 1 },
+  { rowIndex: 24, colIndex: 7, rowspan: 4, colspan: 1 },
+  { rowIndex: 24, colIndex: 8, rowspan: 4, colspan: 1 },
+  { rowIndex: 24, colIndex: 9, rowspan: 4, colspan: 1 },
+  { rowIndex: 24, colIndex: 17, rowspan: 4, colspan: 1 },
+  { rowIndex: 24, colIndex: 18, rowspan: 3, colspan: 1 },
+  { rowIndex: 24, colIndex: 19, rowspan: 3, colspan: 1 },
+  { rowIndex: 24, colIndex: 20, rowspan: 3, colspan: 2 },
+  { rowIndex: 24, colIndex: 4, rowspan: 2, colspan: 2 },
+  { rowIndex: 24, colIndex: 11, rowspan: 2, colspan: 4 },
+  { rowIndex: 24, colIndex: 18, rowspan: 1, colspan: 4 },
+
+  { rowIndex: 40, colIndex: 0, rowspan: 4, colspan: 2 },
+  { rowIndex: 40, colIndex: 2, rowspan: 4, colspan: 1 },
+  { rowIndex: 40, colIndex: 3, rowspan: 4, colspan: 1 },
+  { rowIndex: 40, colIndex: 6, rowspan: 4, colspan: 1 },
+  { rowIndex: 40, colIndex: 7, rowspan: 4, colspan: 1 },
+  { rowIndex: 40, colIndex: 8, rowspan: 4, colspan: 1 },
+  { rowIndex: 40, colIndex: 9, rowspan: 4, colspan: 1 },
+  { rowIndex: 40, colIndex: 17, rowspan: 4, colspan: 1 },
+  { rowIndex: 40, colIndex: 18, rowspan: 3, colspan: 1 },
+  { rowIndex: 40, colIndex: 19, rowspan: 3, colspan: 1 },
+  { rowIndex: 40, colIndex: 20, rowspan: 3, colspan: 2 },
+  { rowIndex: 40, colIndex: 4, rowspan: 2, colspan: 2 },
+  { rowIndex: 40, colIndex: 11, rowspan: 2, colspan: 4 },
+  { rowIndex: 40, colIndex: 18, rowspan: 1, colspan: 4 },
 ];
 
 // const merges = [

@@ -68,6 +68,8 @@ export type Column = {
       | boolean;
   };
 
+  options?: { key: string; value: string; bg?: string; color?: string }[];
+
   // 自定义单元格渲染
   cellRender?: (column: Column, row: ListItem) => VNode | JSX.Element;
   // 自定义单元格覆盖渲染 多提供一个rect信息

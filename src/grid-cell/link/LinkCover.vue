@@ -1,13 +1,17 @@
 <template>
   <div class="vtg-popper-cell vtg-cell__select-cover">
     <div class="vtg-cell__select-cover-content">
-      <div
-        class="tag-item"
-        v-for="item in cellValue"
-        :key="item.key"
-        :style="`background-color: ${item.bg};`"
-      >
-        <div>{{ item.value }}</div>
+      <div class="tag-item">
+        <span>哈哈哈</span>
+        <span>x</span>
+      </div>
+      <div class="tag-item">
+        <span>嘻嘻嘻</span>
+        <span>x</span>
+      </div>
+      <div class="tag-item">
+        <span>恩恩恩</span>
+        <span>x</span>
       </div>
     </div>
     <!-- <div class="vtg-cell__select-cover-icon">
@@ -27,9 +31,8 @@
   </div>
 </template>
 <script setup lang="tsx">
-import { computed, type PropType } from 'vue';
+import { type PropType } from 'vue';
 import { type Column, type ListItem, type TdData } from '@/src/type';
-import { isObject } from 'lodash-es';
 
 const props = defineProps({
   column: {
@@ -44,14 +47,6 @@ const props = defineProps({
     type: Object as PropType<any>,
     default: () => ({}),
   },
-});
-
-const cellValue = computed(() => {
-  const cellData: string | { value: string } = props.row[props.column.field];
-  const cellDataValue = isObject(cellData) ? cellData.value : cellData;
-  return cellDataValue?.split(',').map((key: string) => {
-    return props.column.options?.find((option) => option.key === key);
-  });
 });
 </script>
 
@@ -75,23 +70,10 @@ const cellValue = computed(() => {
 
     .tag-item {
       padding: 0 4px;
+      background-color: red;
       white-space: nowrap;
       margin-bottom: 4px;
       border-radius: 4px;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-
-      .tag-close {
-        width: 14px;
-        height: 14px;
-        cursor: pointer;
-
-        svg {
-          width: 100%;
-          height: 100%;
-        }
-      }
     }
   }
 

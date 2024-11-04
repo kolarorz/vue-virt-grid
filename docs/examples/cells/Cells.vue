@@ -9,6 +9,7 @@
           highlightSelectRow: true,
           highlightSelectCol: true,
           highlightSelectCell: true,
+          showOverflow: 'ellipsis',
           ...customConfig,
         }"
       ></Grid>
@@ -41,7 +42,11 @@ const generateList = (columns: Column[], length = 10000, prefix = 'row-') =>
   Array.from({ length }).map((_, rowIndex) => {
     return columns.reduce(
       (rowData, column, columnIndex) => {
-        rowData[column.field] = `Row ${rowIndex} - Field ${columnIndex}`;
+        if (column.field === 'select' || column.field === 'select1') {
+          rowData[column.field] = 'key1,key2,key3,key4';
+        } else {
+          rowData[column.field] = `Row ${rowIndex} - Field ${columnIndex}`;
+        }
         return rowData;
       },
       {
@@ -50,6 +55,22 @@ const generateList = (columns: Column[], length = 10000, prefix = 'row-') =>
       },
     );
   });
+
+const options = [
+  { key: 'key1', value: '选项1', bg: '#ffe8e6' },
+  { key: 'key2', value: '选项2', bg: '#e6f7ff' },
+  { key: 'key3', value: '选项3', bg: 'rgb(2, 179, 161)' },
+  { key: 'key4', value: '选项4', bg: 'rgb(2, 179, 161)' },
+  { key: 'key5', value: '选项5', bg: 'rgb(2, 179, 161)' },
+  { key: 'key6', value: '选项6', bg: 'rgb(2, 179, 161)' },
+  { key: 'key7', value: '选项7', bg: 'rgb(2, 179, 161)' },
+  { key: 'key8', value: '选项8', bg: 'rgb(2, 179, 161)' },
+  { key: 'key9', value: '选项9', bg: 'rgb(2, 179, 161)' },
+  { key: 'key10', value: '选项10', bg: 'rgb(2, 179, 161)' },
+  { key: 'key11', value: '选项11', bg: 'rgb(2, 179, 161)' },
+  { key: 'key12', value: '选项12', bg: 'rgb(2, 179, 161)' },
+  { key: 'key13', value: '选项13', bg: 'rgb(2, 179, 161)' },
+];
 
 const columns: Column[] = [
   {
@@ -61,7 +82,24 @@ const columns: Column[] = [
     field: 'select',
     title: '内部组件渲染',
     width: 200,
-    type: 'Select',
+    type: 'select',
+    options: options,
+  },
+
+  {
+    field: 'select1',
+    title: '自定义渲染',
+    width: 200,
+    options: options,
+    cellRender: (column: Column, row: ListItem) => <SelectView column={column} row={row} />,
+    // 单击渲染
+    cellCoverRender: (column: Column, row: ListItem, tdData: any) => (
+      <SelectCover column={column} row={row} tdData={tdData} />
+    ),
+    // 双击渲染
+    cellDropdownRender: (column: Column, row: ListItem, tdData: any) => (
+      <SelectDropdown column={column} row={row} tdData={tdData} />
+    ),
   },
   {
     field: 'select0',
@@ -72,27 +110,12 @@ const columns: Column[] = [
         <ElOption label="11" value="11" />
         <ElOption label="22" value="22" />
       </ElSelect>
-
       // return {
       //   props: {},
       //   class: '',
       //   style: '',
       //   render: null,
       // }
-    ),
-  },
-  {
-    field: 'select1',
-    title: '自定义渲染',
-    width: 200,
-    cellRender: (column: Column, row: ListItem) => <SelectView column={column} row={row} />,
-    // 单击渲染
-    cellCoverRender: (column: Column, row: ListItem, tdData: any) => (
-      <SelectCover column={column} row={row} tdData={tdData} />
-    ),
-    // 双击渲染
-    cellDropdownRender: (column: Column, row: ListItem, tdData: any) => (
-      <SelectDropdown column={column} row={row} tdData={tdData} />
     ),
   },
   {
@@ -402,20 +425,20 @@ const customConfig: any = {
 };
 
 // TODO 单元格模式
-list[0].text = {
-  // 实际值
-  value: 'Text',
-  // 渲染函数
-  cellRender: (column: Column, row: ListItem) => <SelectView column={column} row={row} />,
-  // 单击渲染
-  cellCoverRender: (column: Column, row: ListItem, tdData: any) => (
-    <SelectCover column={column} row={row} tdData={tdData} />
-  ),
-  // 双击渲染
-  cellDropdownRender: (column: Column, row: ListItem, tdData: any) => (
-    <SelectDropdown column={column} row={row} tdData={tdData} />
-  ),
-};
+// list[0].text = {
+//   // 实际值
+//   value: 'Text',
+//   // 渲染函数
+//   cellRender: (column: Column, row: ListItem) => <SelectView column={column} row={row} />,
+//   // 单击渲染
+//   cellCoverRender: (column: Column, row: ListItem, tdData: any) => (
+//     <SelectCover column={column} row={row} tdData={tdData} />
+//   ),
+//   // 双击渲染
+//   cellDropdownRender: (column: Column, row: ListItem, tdData: any) => (
+//     <SelectDropdown column={column} row={row} tdData={tdData} />
+//   ),
+// };
 </script>
 <style lang="scss">
 .base-view {

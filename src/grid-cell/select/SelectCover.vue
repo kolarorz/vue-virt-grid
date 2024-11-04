@@ -1,38 +1,39 @@
 <template>
   <div class="vtg-popper-cell vtg-cell__select-cover">
     <div class="vtg-cell__select-cover-content">
-      <div class="tag-item">
-        <span>哈哈哈</span>
-        <span>x</span>
-      </div>
-      <div class="tag-item">
-        <span>嘻嘻嘻</span>
-        <span>x</span>
-      </div>
-      <div class="tag-item">
-        <span>恩恩恩</span>
-        <span>x</span>
+      <div
+        class="tag-item"
+        v-for="item in cellValue"
+        :key="item.key"
+        :style="`background-color: ${item.bg};`"
+      >
+        <div>{{ item.value }}</div>
+        <div class="tag-close" @click.stop="handleClose(item.key)">
+          <svg
+            t="1730451935431"
+            class="icon"
+            viewBox="0 0 1024 1024"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            p-id="4267"
+            width="256"
+            height="256"
+          >
+            <path
+              d="M597.795527 511.488347 813.564755 295.718095c23.833825-23.833825 23.833825-62.47489 0.001023-86.307691-23.832801-23.832801-62.47489-23.833825-86.307691 0L511.487835 425.180656 295.717583 209.410404c-23.833825-23.833825-62.475913-23.833825-86.307691 0-23.832801 23.832801-23.833825 62.47489 0 86.308715l215.769228 215.769228L209.410915 727.258599c-23.833825 23.833825-23.833825 62.47489 0 86.307691 23.832801 23.833825 62.473867 23.833825 86.307691 0l215.768205-215.768205 215.769228 215.769228c23.834848 23.833825 62.475913 23.832801 86.308715 0 23.833825-23.833825 23.833825-62.47489 0-86.307691L597.795527 511.488347z"
+              fill="#272636"
+              p-id="4268"
+            ></path>
+          </svg>
+        </div>
       </div>
     </div>
-    <!-- <div class="vtg-cell__select-cover-icon">
-      <svg
-        width="100%"
-        height="100%"
-        viewBox="0 0 20 20"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M14.5632 7.72544L10.539 13.2587C10.2728 13.6247 9.72696 13.6247 9.46073 13.2587L5.43658 7.72544C5.11611 7.28479 5.43088 6.66666 5.97573 6.66666L14.024 6.66666C14.5689 6.66666 14.8837 7.28479 14.5632 7.72544Z"
-          fill="var(--virt-tree-color-icon)"
-        ></path>
-      </svg>
-    </div> -->
   </div>
 </template>
 <script setup lang="tsx">
-import { type PropType } from 'vue';
+import { computed, type PropType } from 'vue';
 import { type Column, type ListItem, type TdData } from '@/src/type';
+import { isObject } from 'lodash-es';
 
 const props = defineProps({
   column: {
@@ -48,6 +49,22 @@ const props = defineProps({
     default: () => ({}),
   },
 });
+
+const cellDataValue = computed(() => {
+  const cellData: string | { value: string } = props.row[props.column.field];
+  const cellDataValue = isObject(cellData) ? cellData.value : cellData;
+  return cellDataValue ? cellDataValue.split(',') : [];
+});
+
+const cellValue = computed(() => {
+  return cellDataValue.value.map((key: string) => {
+    return props.column.options?.find((option) => option.key === key);
+  });
+});
+
+function handleClose(key: string) {
+  console.log(key);
+}
 </script>
 
 <style lang="scss">
@@ -70,10 +87,23 @@ const props = defineProps({
 
     .tag-item {
       padding: 0 4px;
-      background-color: red;
       white-space: nowrap;
       margin-bottom: 4px;
       border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+
+      .tag-close {
+        width: 14px;
+        height: 14px;
+        cursor: pointer;
+
+        svg {
+          width: 100%;
+          height: 100%;
+        }
+      }
     }
   }
 

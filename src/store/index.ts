@@ -152,6 +152,7 @@ export class GridStore {
     list: [] as ListItem[],
     minSize: 32,
     itemKey: this.rowKey,
+    // fixed: true,
     // buffer: 4,
     renderControl: (begin: number, end: number) => {
       this.watchData.originRect.ys = begin;
@@ -248,22 +249,17 @@ export class GridStore {
       this.watchData.renderRect.xe = this.watchData.originRect.xe;
       return { ys: this.watchData.originRect.ys, ye: this.watchData.originRect.ye };
     }
+    console.time('calcRect');
 
-    // console.time('calcRect');
-    const topMerges: any = [];
-    const leftMerges: any = [];
-    const rightMerges: any = [];
-    const bottomMerges: any = [];
-    // 计算出实际渲染的区域（补全rect）
-    const oys = this.watchData.originRect.ys;
-    const oye = this.watchData.originRect.ye;
-    const oxs = this.watchData.originRect.xs;
-    const oxe = this.watchData.originRect.xe;
+    const { originRect, renderRect } = this.watchData;
+    // 用原始的react计算出实际渲染的rect
+    const { xs: oxs, xe: oxe, ys: oys, ye: oye } = originRect;
+    let [rys, rye, rxs, rxe] = [oys, oye, oxs, oxe];
 
-    let rys = this.watchData.originRect.ys;
-    let rye = this.watchData.originRect.ye;
-    let rxs = this.watchData.originRect.xs;
-    let rxe = this.watchData.originRect.xe;
+    const topMerges: MergeCell[] = [];
+    const leftMerges: MergeCell[] = [];
+    const rightMerges: MergeCell[] = [];
+    const bottomMerges: MergeCell[] = [];
 
     for (let y = oys; y <= oye; y++) {
       for (let x = oxs; x <= oxe; x++) {
@@ -325,13 +321,13 @@ export class GridStore {
       }
     }
 
-    this.watchData.renderRect.ys = rys;
-    this.watchData.renderRect.ye = rye;
-    this.watchData.renderRect.xs = rxs;
-    this.watchData.renderRect.xe = rxe;
+    renderRect.ys = rys;
+    renderRect.ye = rye;
+    renderRect.xs = rxs;
+    renderRect.xe = rxe;
 
-    // console.log('原始区域', this.watchData.originRect);
-    // console.log('渲染区域', this.watchData.renderRect);
+    // console.log('原始区域', originRect);
+    // console.log('渲染区域', renderRect);
 
     // console.warn('topMerges', topMerges);
     // console.warn('leftMerges', leftMerges);
@@ -428,14 +424,22 @@ export class GridStore {
             colspan: colspanLast,
           });
         }
-        // 中间，中间可能有可能无
+        // 左边可能不存在
         if (colIndex > colIndexLast) {
+          // isTop 就取交叉值
+          const isTop = rowIndex < rowIndexLast;
+          // isLast 就取交叉值
+          const isLast = rowIndex + rowspan - 1 > rowIndexLast + rowspanLast - 1;
           // TODO 要把其他顶点的都处理一下
           // 顶点单元格独特处理
           placeCells2Left.push({
-            rowIndex: rowIndex < rowIndexLast ? rowIndexLast : rowIndex,
+            rowIndex: isTop ? rowIndexLast : rowIndex,
             colIndex: colIndexLast,
-            rowspan: rowIndex < rowIndexLast ? rowIndexLast - rowIndex : rowspan,
+            rowspan: isTop
+              ? rowIndexLast - rowIndex
+              : isLast
+                ? rowIndexLast + rowspanLast - rowIndex
+                : rowspan,
             colspan: colIndex - colIndexLast,
           });
         }
@@ -578,7 +582,7 @@ export class GridStore {
     // console.warn(`rys: ${rys} rye: ${rye} rxs: ${rxs} rxe: ${rxe}`);
     // 生成占位单元格信息，用于渲染优化
 
-    // console.timeEnd('calcRect');
+    console.timeEnd('calcRect');
 
     if (horizontal) {
       // 手动调用render
