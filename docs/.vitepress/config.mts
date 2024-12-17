@@ -65,15 +65,17 @@ export default defineConfig({
                 { text: '溢出隐藏', link: '/examples/base/overflow/' },
                 { text: '高亮', link: '/examples/base/highlight/' },
                 { text: '冻结列', link: '/examples/base/fixed/' },
-
+                { text: '索引', link: '/examples/base/index-view/' },
+                { text: '单选框', link: '/examples/base/radio/' },
+                { text: '复选框', link: '/examples/base/checkbox/' },
                 { text: '列宽拖拽', link: '/examples/column/' },
-
                 { text: '自定义类/样式', link: '/examples/custom-class-style/' },
               ],
             },
             { text: '展开', link: '/examples/expand/' },
             { text: '树形', link: '/examples/tree/' },
             { text: '分组', link: '/examples/group/' },
+
             {
               text: '合并单元格',
               collapsed: false,
@@ -85,22 +87,6 @@ export default defineConfig({
               ],
             },
             // { text: '表尾' },
-            {
-              text: '列渲染',
-              collapsed: false,
-              items: [
-                { text: '表头' },
-                { text: '文本' },
-                { text: '索引', link: '/examples/index-view/' },
-                { text: '复选框', link: '/examples/checkbox/' },
-                { text: '单选' },
-                { text: '多选' },
-                { text: '超链接' },
-                { text: '图片' },
-                { text: '人员' },
-                { text: '自定义渲染', link: '/examples/custom/' },
-              ],
-            },
             {
               text: '单元格渲染',
               collapsed: false,

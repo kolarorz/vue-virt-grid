@@ -192,7 +192,6 @@
 table.vtg-table {
   // 在表格内部初始化，以免影响到全局
   // @include reset;
-
   display: table;
   // 解决列冻结border问题
   border-collapse: separate;
@@ -297,14 +296,6 @@ thead.vtg-header {
 
     .vtg-th-cell {
       padding: 8px 12px;
-
-      &.vtg-th-cell__checkbox {
-        // text-align: center;
-
-        .vtg-th-cell__checkbox-title {
-          margin-left: 4px;
-        }
-      }
     }
 
     &.is-fixed {
@@ -459,19 +450,6 @@ tbody.vtg-body {
     word-break: break-all;
     // padding: 6px 12px;
     padding: 0 12px;
-
-    &.vtg-cell__index {
-      text-align: center;
-      padding: 0;
-    }
-
-    &.vtg-cell__checkbox {
-      // text-align: center;
-
-      .vtg-cell__checkbox-field {
-        margin-left: 4px;
-      }
-    }
   }
 
   // 空白填充
@@ -588,6 +566,39 @@ tbody.vtg-body {
     &.row-expand-icon--expand {
       transform: rotate(90deg);
     }
+  }
+}
+
+// 单元格
+.vtg-th-cell__checkbox {
+  input {
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+    box-sizing: border-box;
+  }
+
+  .vtg-th-cell__checkbox-title {
+    margin-left: 4px;
+  }
+}
+
+.vtg-cell__index {
+  // padding: 0;
+  // display: flex;
+  // align-items: center;
+}
+
+.vtg-cell__checkbox {
+  input {
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+    box-sizing: border-box;
+  }
+
+  .vtg-cell__checkbox-field {
+    margin-left: 4px;
   }
 }
 
