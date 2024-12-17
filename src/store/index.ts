@@ -44,7 +44,7 @@ export interface IColumnsRenderInfo {
 
 const defaultGridOptions = {
   rowKey: 'id',
-  rowMinHeight: 32,
+  minRowHeight: 36,
   merges: [] as MergeCell[],
   groupConfig: [] as { columnId: string; sort: 'desc' | 'asc' }[],
   // TODO 看看要不要默认true好一点
@@ -106,7 +106,7 @@ export class GridStore {
 
     // 配置
     config: {
-      rowHeight: 36,
+      minRowHeight: 36,
       colWidth: 100,
       // headerHeight: 30,
       // headerWidth: 100,
@@ -167,8 +167,8 @@ export class GridStore {
     this.virtualListProps.itemKey = key;
   }
 
-  setRowMinHeight(rowMinHeight: number) {
-    this.virtualListProps.minSize = rowMinHeight;
+  setRowMinHeight(minRowHeight: number) {
+    this.virtualListProps.minSize = minRowHeight;
   }
 
   setRootEl(rootEl: HTMLElement | null) {
@@ -267,7 +267,7 @@ export class GridStore {
 
     this.mergeModule.setMerges(options.merges);
 
-    this.setRowMinHeight(options.rowMinHeight ?? defaultGridOptions.rowMinHeight);
+    this.setRowMinHeight(options.minRowHeight ?? defaultGridOptions.minRowHeight);
 
     this.setCustomRender({
       cellCoverRender: options.cellCoverRender,

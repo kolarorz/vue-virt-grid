@@ -11,6 +11,7 @@
           highlightSelectCell: true,
           showOverflow: 'ellipsis',
           ...customConfig,
+          minRowHeight: minRowHeight,
         }"
       ></Grid>
     </div>
@@ -72,6 +73,8 @@ const options = [
   { key: 'key13', value: '选项13', bg: 'rgb(2, 179, 161)' },
 ];
 
+const minRowHeight = 36;
+
 const columns: Column[] = [
   {
     field: 'text',
@@ -91,21 +94,23 @@ const columns: Column[] = [
     title: '自定义渲染',
     width: 200,
     options: options,
-    cellRender: (column: Column, row: ListItem) => <SelectView column={column} row={row} />,
+    cellRender: (tdData: TdData) => (
+      <SelectView height={minRowHeight} column={tdData.column} row={tdData.row} />
+    ),
     // 单击渲染
-    cellCoverRender: (column: Column, row: ListItem, tdData: any) => (
-      <SelectCover column={column} row={row} tdData={tdData} />
+    cellCoverRender: (tdData: TdData) => (
+      <SelectCover column={tdData.column} row={tdData.row} tdData={tdData} />
     ),
     // 双击渲染
-    cellDropdownRender: (column: Column, row: ListItem, tdData: any) => (
-      <SelectDropdown column={column} row={row} tdData={tdData} />
+    cellDropdownRender: (tdData: TdData) => (
+      <SelectDropdown column={tdData.column} row={tdData.row} tdData={tdData} />
     ),
   },
   {
     field: 'select0',
     title: '加载element-plus组件',
     width: 200,
-    cellCoverRender: (column: Column, row: ListItem, tdData: any) => (
+    cellCoverRender: () => (
       <ElSelect placeholder="Select" size="large" style="width: 100%">
         <ElOption label="11" value="11" />
         <ElOption label="22" value="22" />
@@ -390,14 +395,14 @@ const columns: Column[] = [
     field: 'select111',
     title: '自定义渲染',
     width: 200,
-    cellRender: (column: Column, row: ListItem) => <SelectView column={column} row={row} />,
+    cellRender: (tdData: any) => <SelectView column={tdData.column} row={tdData.row} />,
     // 单击渲染
-    cellCoverRender: (column: Column, row: ListItem, tdData: any) => (
-      <SelectCover column={column} row={row} tdData={tdData} />
+    cellCoverRender: (tdData: any) => (
+      <SelectCover column={tdData.column} row={tdData.row} tdData={tdData} />
     ),
     // 双击渲染
-    cellDropdownRender: (column: Column, row: ListItem, tdData: any) => (
-      <SelectDropdown column={column} row={row} tdData={tdData} />
+    cellDropdownRender: (tdData: any) => (
+      <SelectDropdown column={tdData.column} row={tdData.row} tdData={tdData} />
     ),
   },
 ];

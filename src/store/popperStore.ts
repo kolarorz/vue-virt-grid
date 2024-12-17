@@ -1,4 +1,4 @@
-import { createApp, type App } from 'vue';
+import { createApp, nextTick, type App } from 'vue';
 import { createPopper } from '@/src/popper/popper';
 import { GridStore } from '@/src/store';
 import { isFunction } from 'lodash-es';
@@ -16,7 +16,8 @@ class PopperStore {
 
     this.coverEl = document.createElement('div');
     this.coverEl.classList.add('vtg-popper-container');
-    this.coverEl.classList.add('vtg-popper-container--cover');
+    // TODO 需要判断是否有激活单元格选项配置
+    // this.coverEl.classList.add('vtg-popper-container--cover');
     this.coverEl.addEventListener('click', this.toggleDropdownRender.bind(this));
 
     this.dropdownEl = document.createElement('div');
@@ -25,7 +26,6 @@ class PopperStore {
 
   coverRender(tdData: any) {
     this.tdData = tdData;
-    console.log('tdData', this.tdData);
 
     if (!this.coverEl || !this.gridStore.clientEl) return;
     if (!isFunction(tdData?.column?.cellCoverRender)) {
@@ -34,7 +34,10 @@ class PopperStore {
       return;
     }
     this.coverApp = createApp({
-      render: () => tdData.column.cellCoverRender?.(tdData.column, tdData.row, tdData),
+      render: () =>
+        tdData.column.cellCoverRender?.(tdData, () => {
+          this.remove();
+        }),
     });
     createPopper({
       reference: tdData.el,
@@ -51,13 +54,10 @@ class PopperStore {
     console.log('toggleDropdownRender', this.dropdownEl, this.dropdownApp);
 
     if (this.dropdownApp && this.gridStore.clientEl?.contains(this.dropdownEl)) {
-      console.log(1);
       this.gridStore.clientEl?.removeChild(this.dropdownEl);
     } else if (this.dropdownApp) {
-      console.log(2);
       this.gridStore.clientEl?.appendChild(this.dropdownEl);
     } else {
-      console.log(3);
       this.dropdownRender(this.tdData);
     }
   }
@@ -67,7 +67,7 @@ class PopperStore {
     if (!isFunction(tdData?.column?.cellDropdownRender)) return;
 
     this.dropdownApp = createApp({
-      render: () => tdData.column.cellDropdownRender?.(tdData.column, tdData.row, tdData),
+      render: () => tdData.column.cellDropdownRender?.(tdData),
     });
 
     createPopper({
@@ -80,6 +80,7 @@ class PopperStore {
   }
 
   remove() {
+    console.log('remove');
     if (this.coverEl && this.gridStore.clientEl?.contains(this.coverEl)) {
       this.gridStore.clientEl?.removeChild(this.coverEl);
       this.coverApp = null;

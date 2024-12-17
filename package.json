@@ -19,7 +19,6 @@
   "dependencies": {
     "lodash-es": "^4.17.21",
     "nanoid": "^5.0.4",
-    "vue-demi": "^0.14.6",
     "vue-virt-list": "^1.5.5"
   },
   "devDependencies": {

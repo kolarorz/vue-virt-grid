@@ -37,11 +37,7 @@ const generateList = (columns: ReturnType<typeof generateColumns>, length = 20, 
     );
   });
 
-const columns: Column[] = [
-  { type: 'checkbox', width: 50, fixed: 'left' },
-  { type: 'checkbox', width: 50, fixed: 'left' },
-  ...generateColumns(20),
-];
+const columns: Column[] = [{ type: 'checkbox', width: 50, fixed: 'left' }, ...generateColumns(20)];
 const list: ListItem[] = generateList(columns, 100000);
 </script>
 <style lang="scss">

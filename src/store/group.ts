@@ -93,7 +93,13 @@ export class GridGroup {
           groupLevel += 1;
         }
 
-        const row = { ...item, level, groupLevel, isLastChild: index === list.length - 1 };
+        // const row = { ...item, level, groupLevel, isLastChild: index === list.length - 1 };
+        // 需要用原始对象，否则不能响应式
+        const row = Object.assign(item, {
+          level,
+          groupLevel,
+          isLastChild: index === list.length - 1,
+        });
         flattenList.push(row);
         this.store.gridRowMap[row.id] = row;
 
@@ -141,7 +147,13 @@ export class GridGroup {
           groupLevel += 1;
         }
 
-        const row = { ...item, level, groupLevel, isLastChild: index === list.length - 1 };
+        // const row = { ...item, level, groupLevel, isLastChild: index === list.length - 1 };
+        // 需要用原始对象，否则不能响应式
+        const row = Object.assign(item, {
+          level,
+          groupLevel,
+          isLastChild: index === list.length - 1,
+        });
         flattenList.push(row);
         this.store.gridRowMap[row.id] = row;
 

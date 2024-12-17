@@ -104,7 +104,10 @@ export default defineConfig({
             {
               text: '单元格渲染',
               collapsed: false,
-              items: [{ text: '单元格', link: '/examples/cells/' }],
+              items: [
+                { text: '单元格 - 加载第三方组件', link: '/examples/cells-3rd/' },
+                { text: '内置单元格 - 开发中', link: '/examples/cells/' },
+              ],
             },
             { text: '事件处理', link: '/examples/events/' },
             { text: 'spreadsheet(实验室)', link: '/examples/spreadsheet/' },

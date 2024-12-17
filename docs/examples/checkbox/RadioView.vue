@@ -38,7 +38,6 @@ const generateList = (columns: ReturnType<typeof generateColumns>, length = 20, 
 
 const columns: Column[] = [
   { type: CellType.Radio, width: 80, fixed: 'left', title: '单选' },
-  { type: CellType.Radio, width: 200, fixed: 'left', title: '带label', field: 'radio' },
   ...generateColumns(20),
 ];
 const list: ListItem[] = generateList(columns, 5000);

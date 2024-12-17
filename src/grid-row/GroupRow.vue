@@ -1,7 +1,7 @@
 <template>
   <tr ref="itemRefEl" class="vtg-tr vtg-tr--group">
     <td class="vtg-td vtg-td--group" :colspan="columnModule.flattedColumns.length">
-      <div class="vtg-cell" :style="`height: ${config.rowHeight}px;`">
+      <div class="vtg-cell" :style="`height: ${config.minRowHeight}px;`">
         <Placement
           v-for="item in props.row.level"
           :key="item"

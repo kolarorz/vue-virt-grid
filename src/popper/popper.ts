@@ -150,9 +150,11 @@ export const createPopper = ({
   if (popper instanceof HTMLElement) {
     popperEl = popper;
   } else {
-    const div = document.createElement('div');
-    popperEl = popper.mount(div).$el;
+    popperEl = document.createElement('div');
+    popper.mount(popperEl);
   }
+
+  console.log('popperEl', popperEl);
 
   const {
     left: referenceLeft,
@@ -181,6 +183,7 @@ export const createPopper = ({
     popperContainer.style.top = `${top}px`;
     popperContainer.style.width = `${referenceWidth + 1}px`;
     popperContainer.style.minHeight = `${referenceHeight + 1}px`;
+    popperContainer.style.border = `border: 2px solid var(--#{$prefix}-select-border-color);`;
   } else {
     popperContainer.style.left = `${referenceLeft - mountElLeft + scrollLeft - 2}px`;
     popperContainer.style.top = `${referenceTop - mountElTop + referenceHeight + scrollTop + 2}px`;

@@ -21,7 +21,7 @@ import {
 const props = defineProps<{
   list: ListItem[];
   rowKey?: string | number;
-  rowMinHeight?: number;
+  minRowHeight?: number;
   // 树形 or 分组
   defaultExpandAll?: boolean;
   merges?: MergeCell[];

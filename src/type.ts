@@ -71,15 +71,15 @@ export type Column = {
   options?: { key: string; value: string; bg?: string; color?: string }[];
 
   // 自定义单元格渲染
-  cellRender?: (column: Column, row: ListItem) => VNode | JSX.Element;
+  cellRender?: (tdData: TdData) => VNode | JSX.Element;
   // 自定义单元格覆盖渲染 多提供一个rect信息
-  cellCoverRender?: (column: Column, row: ListItem, extra: any) => VNode | JSX.Element;
+  cellCoverRender?: (tdData: TdData) => VNode | JSX.Element;
   // 自定义单元格下拉渲染
-  cellDropdownRender?: (column: Column, row: ListItem, extra: any) => VNode | JSX.Element;
+  cellDropdownRender?: (tdData: TdData) => VNode | JSX.Element;
   // [仅存在于column中] 自定义header渲染
   headerRender?: (column: Column) => VNode | JSX.Element;
   // [仅存在于column中] 自定义expand渲染
-  expandRender?: (column: Column, row: ListItem) => VNode | JSX.Element;
+  // expandRender?: (tdData: TdData) => VNode | JSX.Element;
 };
 
 /**
@@ -123,6 +123,7 @@ export type TdData = {
   columnIndex: number;
   row: ListItem;
   rowIndex: number;
+
   cell: string | number | CellExtra;
   el: HTMLElement;
   event: Event;
@@ -273,7 +274,7 @@ export interface SelectedCells {
 
 export interface TableOptions {
   rowKey?: string | number;
-  rowMinHeight?: number;
+  minRowHeight?: number;
   showOverflow?: '' | 'ellipsis' | 'tooltip';
 
   showHeader?: boolean;
@@ -340,11 +341,11 @@ export interface TableOptions {
     columnIndex: number;
   }) => string;
   // 自定义单元格渲染
-  cellRender?: (column: Column, row: ListItem, extra: any) => VNode | JSX.Element;
-  cellCoverRender?: (column: Column, row: ListItem, extra: any) => VNode | JSX.Element;
-  cellDropdownRender?: (column: Column, row: ListItem, extra: any) => VNode | JSX.Element;
+  cellRender?: (tdData: TdData) => VNode | JSX.Element;
+  cellCoverRender?: (tdData: TdData) => VNode | JSX.Element;
+  cellDropdownRender?: (tdData: TdData) => VNode | JSX.Element;
   // TODO 还没实现 分组单元格渲染
-  groupRender?: (column: Column, row: ListItem) => VNode | JSX.Element;
+  // groupRender?: (tdData: TdData) => VNode | JSX.Element;
 }
 
 export type CustomRender = Pick<

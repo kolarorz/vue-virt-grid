@@ -121,12 +121,16 @@ export const useContentEvent = (gridStore: GridStore) => {
   document.addEventListener('mousedown', (evt: MouseEvent) => {
     const popper = (evt.composedPath() as HTMLElement[]).find(
       (el: HTMLElement) =>
-        el?.classList?.contains('vtg-popper-container') || el?.classList?.contains('vtg-td'),
+        el?.classList?.contains('vtg-popper-container') ||
+        el?.classList?.contains('vtg-td') ||
+        // TODO 未来用插件化支持
+        el?.classList?.contains('el-popper'),
     );
     if (!popper) {
       gridStore.interactionModule.clearSelect();
-      // console.log('clearSelect');
       gridStore.popperModule.remove();
+      // TODO 未来用插件化支持
+      document.querySelectorAll('.el-popper').forEach((el) => el.remove());
     }
   });
 

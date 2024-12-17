@@ -26,6 +26,51 @@
 }
 
 @mixin reset {
+  body,
+  div,
+  ul,
+  li,
+  ol,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  input,
+  textarea,
+  select,
+  p,
+  dl,
+  dt,
+  dd,
+  a,
+  img,
+  button,
+  form,
+  table,
+  th,
+  tr,
+  td,
+  tbody,
+  article,
+  aside,
+  details,
+  figcaption,
+  figure,
+  footer,
+  header,
+  menu,
+  nav,
+  section {
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+    box-sizing: border-box;
+  }
+}
+
+@mixin table-reset {
   // 初始化表格样式
   table,
   thead,
@@ -36,7 +81,6 @@
   td {
     margin: 0;
     padding: 0;
-    -webkit-tap-highlight-color: transparent;
     box-sizing: border-box;
     // 不能用表格的边框，样式不好看
     border: unset;
@@ -63,7 +107,7 @@
     }
   }
 
-  @include reset;
+  @include table-reset;
   @include scrollbar;
 }
 
@@ -146,6 +190,9 @@
 
 // 表格
 table.vtg-table {
+  // 在表格内部初始化，以免影响到全局
+  // @include reset;
+
   display: table;
   // 解决列冻结border问题
   border-collapse: separate;
@@ -311,7 +358,6 @@ tbody.vtg-body {
         display: flex;
         align-items: center;
         width: 100%;
-        padding: 8px 4px;
       }
     }
 
@@ -399,16 +445,20 @@ tbody.vtg-body {
     div.vtg-cell {
       overflow: hidden;
       text-overflow: ellipsis;
-      padding: 8px 12px;
       white-space: nowrap;
     }
   }
 
   div.vtg-cell {
     box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
     white-space: normal;
     word-break: break-all;
-    padding: 4px 6px;
+    // padding: 6px 12px;
+    padding: 0 12px;
 
     &.vtg-cell__index {
       text-align: center;
@@ -546,11 +596,18 @@ tbody.vtg-body {
   z-index: 5;
   position: absolute;
   background-color: #fff;
+  // 既要盖住下面的元素，又要显示下面单元格的边框，所以需要加这个border
+  border: 1px solid var(--vtg-border-color);
 }
 
 .vtg-popper-container--cover {
   border: 2px solid var(--#{$prefix}-select-border-color);
 }
+
+// .vtg-popper-container-x {
+//   width: 100%;
+//   height: 100%;
+// }
 
 // TODO
 .vtg-popper-cell {

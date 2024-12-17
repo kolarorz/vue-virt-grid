@@ -12,7 +12,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { Grid, type ListItem, type Column } from 'vue-virt-grid';
+import { Grid, type ListItem, type Column, CellType } from 'vue-virt-grid';
 
 const generateColumns = (length = 10, prefix = 'field-', props?: any) =>
   Array.from({ length }).map((_, columnIndex) => ({
@@ -37,7 +37,7 @@ const generateList = (columns: ReturnType<typeof generateColumns>, length = 20, 
   });
 
 const columns: Column[] = [
-  { type: 'checkbox', width: 200, fixed: 'left', field: 'checkbox', title: '复选框' },
+  { type: CellType.Radio, width: 200, fixed: 'left', title: '带label', field: 'radio' },
   ...generateColumns(20),
 ];
 const list: ListItem[] = generateList(columns, 5000);

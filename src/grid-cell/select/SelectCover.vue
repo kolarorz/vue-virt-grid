@@ -1,5 +1,5 @@
 <template>
-  <div class="vtg-popper-cell vtg-cell__select-cover">
+  <div class="vtg-cell vtg-cell__select-cover">
     <div class="vtg-cell__select-cover-content">
       <div
         class="tag-item"
@@ -69,13 +69,14 @@ function handleClose(key: string) {
 
 <style lang="scss">
 .vtg-cell__select-cover {
+  padding: 6px 12px;
   width: 100%;
-  height: 100%;
   background-color: #fff;
   position: relative;
   z-index: 99;
   user-select: none;
   display: flex;
+  overflow: hidden;
 
   .vtg-cell__select-cover-content {
     height: 100%;

@@ -64,7 +64,10 @@ export default defineComponent({
         row[column.field]?.cellRender ?? column?.cellRender ?? gridStore.customRender?.cellRender;
       // 4. 走默认TextCell
       if (cellRender) {
-        const renderCell = cellRender(column, props.row);
+        const renderCell = cellRender({
+          column: column,
+          row: props.row,
+        });
         if (renderCell) return renderCell;
       } else if (type) {
         switch (type) {
@@ -241,6 +244,7 @@ export default defineComponent({
             class={cls.main(column)}
             data-rowidx={rowIndex}
             data-colidx={actualColIndex}
+            style={`height: ${watchData.config.minRowHeight}px`}
           >
             {/* <TextCell rowIndex={rowIndex} row={row} column={column}></TextCell> */}
             {getRenderCell({
