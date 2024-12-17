@@ -16,10 +16,10 @@ import GridHeaderRow from './GridHeaderRow.vue';
 import type { ColumnItem } from '@/src/type';
 
 const gridStore = useGridStore();
-const { columnsInfo } = gridStore;
+const { columnsInfo } = gridStore.columnModule;
 
 const centerColumnsInfo = computed(() => {
-  const { centerNormalColumns, columnsInfo } = gridStore;
+  const { centerNormalColumns, columnsInfo } = gridStore.columnModule;
 
   const { headerCellInfo, centerNormalHeaderColumns } = columnsInfo;
 
@@ -53,7 +53,11 @@ const centerColumnsInfo = computed(() => {
   };
 
   // 这些都是要渲染的表头单元格
-  for (let i = gridStore.watchData.renderRect.xs; i <= gridStore.watchData.renderRect.xe; i++) {
+  for (
+    let i = gridStore.mergeModule.mergeState.renderRect.xs;
+    i <= gridStore.mergeModule.mergeState.renderRect.xe;
+    i++
+  ) {
     const column = centerNormalColumns[i];
     renderHeader(column);
   }

@@ -14,13 +14,13 @@
         (!row.level || row.level === row.groupLevel) && 'tree-leading--first-node',
       ]"
     >
-      <template v-if="watchData.foldMap[row.id] !== undefined">
+      <template v-if="groupModule.groupState.foldMap[row.id] !== undefined">
         <div
           :class="[
             'tree-leading-icon',
-            !watchData.foldMap[props.row.id] && 'tree-leading-icon--expand',
+            !groupModule.groupState.foldMap[props.row.id] && 'tree-leading-icon--expand',
           ]"
-          @click.stop="gridStore.toggleFold(row.id)"
+          @click.stop="gridStore.groupModule.toggleFold(row.id)"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -52,7 +52,7 @@ import type { ListItem, ColumnItem } from '@/src/type';
 import Placement from '@/src/components/Placement.vue';
 
 const gridStore = useGridStore();
-const { watchData } = gridStore;
+const { groupModule } = gridStore;
 
 const props = defineProps<{
   rowIndex: number;

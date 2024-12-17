@@ -86,8 +86,8 @@ export default defineComponent({
       }
     };
 
-    const selectRowId = computed(() => gridStore.getSelectRow());
-    const selectColId = computed(() => gridStore.getSelectCol());
+    const selectRowId = computed(() => gridStore.interactionModule.getSelectRow());
+    const selectColId = computed(() => gridStore.interactionModule.getSelectCol());
 
     const getRowClass = () => {
       const fn = gridStore.getState('rowClassName');
@@ -127,7 +127,7 @@ export default defineComponent({
         'is-fixed',
         'is-fixed--left',
         column._id === selectColId.value && 'current-column',
-        gridStore.getSelectionClass(props.rowIndex, column),
+        gridStore.interactionModule.getSelectionClass(props.rowIndex, column),
         getCellClass(column),
         column.className,
       ],
@@ -136,7 +136,7 @@ export default defineComponent({
         'vtg-td',
         gridStore.getState('showOverflow') && `overflow-${gridStore.getState('showOverflow')}`,
         column._id === selectColId.value && 'current-column',
-        gridStore.getSelectionClass(props.rowIndex, column),
+        gridStore.interactionModule.getSelectionClass(props.rowIndex, column),
         getCellClass(column),
         column.className,
       ],
@@ -146,7 +146,7 @@ export default defineComponent({
         'is-fixed',
         'is-fixed--right',
         column._id === selectColId.value && 'current-column',
-        gridStore.getSelectionClass(props.rowIndex, column),
+        gridStore.interactionModule.getSelectionClass(props.rowIndex, column),
         getCellClass(column),
         column.className,
       ],
@@ -171,12 +171,10 @@ export default defineComponent({
   render() {
     const {
       watchData,
-      tempMerges,
-      merges,
-      leftFixedColumns,
-      rightFixedColumns,
-      centerNormalColumns,
-      columnsInfo,
+      // tempMerges,
+      // merges,
+      mergeModule: { tempMerges, merges, mergeState },
+      columnModule: { leftFixedColumns, rightFixedColumns, centerNormalColumns, columnsInfo },
     } = this.gridStore;
     const { headerCellInfo } = columnsInfo;
     const { row, rowIndex, maxHeight, getCellStyle, getRowStyle, getRenderCell, cls } = this;
@@ -208,7 +206,7 @@ export default defineComponent({
       }
     }
     // 左侧占位
-    if (watchData.renderRect.xs > 0) {
+    if (mergeState.renderRect.xs > 0) {
       tds.push(
         <td
           key={`${watchData.renderKey}-${rowIndex}-lp`}
@@ -217,12 +215,16 @@ export default defineComponent({
           data-rowidx={rowIndex}
           data-colidx="lp"
           rowspan={1}
-          colspan={watchData.renderRect.xs}
+          colspan={mergeState.renderRect.xs}
         ></td>,
       );
     }
     // 主体单元格
-    for (let colIndex = watchData.renderRect.xs; colIndex <= watchData.renderRect.xe; colIndex++) {
+    for (
+      let colIndex = mergeState.renderRect.xs;
+      colIndex <= mergeState.renderRect.xe;
+      colIndex++
+    ) {
       const column = centerNormalColumns[colIndex];
       const actualColIndex = colIndex + leftFixedColumns.length;
 
@@ -275,7 +277,7 @@ export default defineComponent({
       }
     }
     // 右侧占位
-    if (watchData.renderRect.xe < centerNormalColumns.length - 1) {
+    if (mergeState.renderRect.xe < centerNormalColumns.length - 1) {
       // console.log('watchData.renderRect.xe', watchData.renderRect.xe, centerNormalColumns.length);
       tds.push(
         <td
@@ -287,7 +289,7 @@ export default defineComponent({
           rowspan={1}
           // todo why 要减去右侧length呢
           colspan={
-            centerNormalColumns.length - watchData.renderRect.xe + 1 - rightFixedColumns.length
+            centerNormalColumns.length - mergeState.renderRect.xe + 1 - rightFixedColumns.length
           }
         ></td>,
       );

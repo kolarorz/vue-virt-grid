@@ -28,7 +28,7 @@ class PopperStore {
     console.log('tdData', this.tdData);
 
     if (!this.coverEl || !this.gridStore.clientEl) return;
-    if (!isFunction(tdData.column?.cellCoverRender)) {
+    if (!isFunction(tdData?.column?.cellCoverRender)) {
       // 这里判断一下，没有cover，如果只有dropdown，那就直接渲染dropdown
       this.dropdownRender(tdData);
       return;
@@ -64,7 +64,7 @@ class PopperStore {
 
   dropdownRender(tdData: any) {
     if (!this.coverEl || !this.dropdownEl || !this.gridStore.clientEl) return;
-    if (!isFunction(tdData.column?.cellDropdownRender)) return;
+    if (!isFunction(tdData?.column?.cellDropdownRender)) return;
 
     this.dropdownApp = createApp({
       render: () => tdData.column.cellDropdownRender?.(tdData.column, tdData.row, tdData),

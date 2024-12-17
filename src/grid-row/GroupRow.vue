@@ -1,6 +1,6 @@
 <template>
   <tr ref="itemRefEl" class="vtg-tr vtg-tr--group">
-    <td class="vtg-td vtg-td--group" :colspan="flattedColumns.length">
+    <td class="vtg-td vtg-td--group" :colspan="columnModule.flattedColumns.length">
       <div class="vtg-cell" :style="`height: ${config.rowHeight}px;`">
         <Placement
           v-for="item in props.row.level"
@@ -9,7 +9,7 @@
         ></Placement>
         <div
           :class="['group-icon', !foldMap[props.row.id] && 'group-icon--expand']"
-          @click.stop="gridStore.toggleFold(row.id)"
+          @click.stop="gridStore.groupModule.toggleFold(row.id)"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -37,8 +37,9 @@ import { type ListItem } from '@/src/type';
 import Placement from '@/src/components/Placement.vue';
 
 const gridStore = useGridStore();
-const { foldMap, config } = gridStore.watchData;
-const { flattedColumns } = gridStore;
+const { foldMap } = gridStore.groupModule.groupState;
+const { config } = gridStore.watchData;
+const { columnModule } = gridStore;
 
 const props = withDefaults(
   defineProps<{

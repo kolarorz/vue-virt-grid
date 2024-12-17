@@ -79,11 +79,11 @@
     </div>
     <div
       :class="cls.leftFixedShadow"
-      :style="{ left: `${gridStore.watchData.fixedInfo.leftWidth || 0}px` }"
+      :style="{ left: `${gridStore.columnModule.columnState.fixedInfo.leftWidth || 0}px` }"
     ></div>
     <div
       :class="cls.rightFixedShadow"
-      :style="{ right: `${gridStore.watchData.fixedInfo.rightWidth + 16 || 0}px` }"
+      :style="{ right: `${gridStore.columnModule.columnState.fixedInfo.rightWidth + 16 || 0}px` }"
     ></div>
     <div class="vtg-mask" v-if="isEmpty">
       <slot name="empty"><p>No Data</p></slot>
@@ -91,7 +91,7 @@
   </div>
 </template>
 <script setup lang="tsx">
-import { onMounted, provide, ref, watch, computed, onBeforeUnmount, createApp } from 'vue';
+import { onMounted, ref, watch, computed, onBeforeUnmount } from 'vue';
 import { useVirtList } from 'vue-virt-list';
 import { GridStore, useGridStore } from '@/src/store';
 import { useContentEvent } from '@/src/hooks/useEvent';
@@ -148,7 +148,8 @@ const gridStore = useGridStore(props);
 // 如果有分组优先判断分组信息
 const isEmpty = computed(() => {
   return gridStore.getState('groupConfig')?.length
-    ? gridStore.groupFoldConstructor(props.list, gridStore.getState('groupConfig')).length === 0
+    ? gridStore.groupModule.groupFoldConstructor(props.list, gridStore.getState('groupConfig'))
+        .length === 0
     : props.list.length === 0;
 });
 
@@ -157,7 +158,7 @@ watch(
   (nv) => {
     console.log('groupConfig', nv);
     if (!nv) return;
-    const list = gridStore.groupFoldConstructor(props.list, nv);
+    const list = gridStore.groupModule.groupFoldConstructor(props.list, nv);
     gridStore.setStateValue('groupConfig', nv);
     console.log('groupConfig', list);
     gridStore.initDataList(list);
@@ -179,17 +180,15 @@ watch(
   },
 );
 
-const { centerNormalColumns, leftFixedColumns, rightFixedColumns } = gridStore;
-
-function calcFixedShadow(scrollLeft: number, scrollWidth: number, clientWidth: number) {
-  gridStore.calcGridScrollingStatus(scrollLeft, scrollWidth, clientWidth);
-}
+const {
+  columnModule: { centerNormalColumns, leftFixedColumns, rightFixedColumns },
+} = gridStore;
 
 const emitFunction = {
   scroll: (evt: Event) => {
-    const { scrollLeft, scrollTop, scrollWidth, clientWidth } = evt.target as HTMLElement;
-    gridStore.calcVisibleColumns(scrollLeft, clientWidth);
-    calcFixedShadow(scrollLeft, scrollWidth, clientWidth);
+    const { scrollLeft, scrollWidth, clientWidth } = evt.target as HTMLElement;
+    gridStore.columnModule.calcVisibleColumns(scrollLeft, clientWidth);
+    gridStore.calcFixedShadow(scrollLeft, scrollWidth, clientWidth);
     // 滚动时清除列宽调整的线
     clearResizeLine();
   },
@@ -252,7 +251,7 @@ const cls = computed(() => ({
   ],
 }));
 const fullWidth = computed(() => {
-  return gridStore.watchData.fullWidth;
+  return gridStore.columnModule.columnState.fullWidth;
 });
 const headerHeight = computed(() => slotSize.stickyHeaderSize);
 
@@ -260,13 +259,13 @@ onMounted(() => {
   // gridStore.layoutStore.initContainer(clientRefEl.value);
   if (clientRefEl.value) {
     const { scrollLeft, scrollWidth, clientWidth } = clientRefEl.value as HTMLElement;
-    gridStore.calcVisibleColumns(scrollLeft, clientWidth);
-    calcFixedShadow(scrollLeft, scrollWidth, clientWidth);
+    gridStore.columnModule.calcVisibleColumns(scrollLeft, clientWidth);
+    gridStore.calcFixedShadow(scrollLeft, scrollWidth, clientWidth);
 
     gridStore.setClientEl(clientRefEl.value);
   }
   if (rootRefEl.value) {
-    gridStore.initSelectionElement(rootRefEl.value);
+    gridStore.interactionModule.initSelectionElement(rootRefEl.value);
     gridStore.setRootEl(rootRefEl.value);
   }
   if (tableRefEl.value) {

@@ -64,7 +64,7 @@ import { useResizeColumn } from '@/src/hooks/useResizeColumn';
 
 const gridStore = useGridStore();
 
-const { columnsInfo } = gridStore;
+const { columnsInfo } = gridStore.columnModule;
 
 const headerCellInfo = computed(() => columnsInfo.headerCellInfo);
 const leftFixedHeaderColumns = computed(() => columnsInfo.leftFixedHeaderColumns);
@@ -189,7 +189,7 @@ onUpdated(() => {
       headerCellInfo.value[colId]!,
       gridStore.tableEl!,
       (width) => {
-        if (colId) gridStore.setColumnWidth(colId, width);
+        if (colId) gridStore.columnModule.setColumnWidth(colId, width);
       },
     );
   });

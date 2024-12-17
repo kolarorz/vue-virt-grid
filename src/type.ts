@@ -96,6 +96,7 @@ export interface MergeCell {
   colIndex: number;
   rowspan: number;
   colspan: number;
+  mergeBy?: [number, number];
 }
 
 type CellExtra = {

@@ -1,6 +1,6 @@
 <template>
-  <div class="vtg-cell vtg-cell__expand" @click="gridStore.toggleExpand(row.id)">
-    <div :class="['row-expand-icon', watchData.expandMap[row.id] && 'row-expand-icon--expand']">
+  <div class="vtg-cell vtg-cell__expand" @click="gridStore.groupModule.toggleExpand(row.id)">
+    <div :class="['row-expand-icon', groupState.expandMap[row.id] && 'row-expand-icon--expand']">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="12"
@@ -22,7 +22,7 @@ import type { ListItem, ColumnItem } from '@/src/type';
 
 const gridStore = useGridStore();
 
-const { watchData } = gridStore;
+const { groupState } = gridStore.groupModule;
 
 defineProps<{
   rowIndex: number;

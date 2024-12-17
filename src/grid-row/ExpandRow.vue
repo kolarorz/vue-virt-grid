@@ -14,7 +14,7 @@ import { useObserverItem } from 'vue-virt-list';
 import { type ListItem } from '@/src/type';
 
 const gridStore = useGridStore();
-const { flattedColumns } = gridStore;
+const { flattedColumns } = gridStore.columnModule;
 
 const expandCol = computed(() => flattedColumns.find((c) => c.type === 'expand'));
 

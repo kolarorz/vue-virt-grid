@@ -95,7 +95,7 @@ export class GridSelection {
       document.body.addEventListener('mouseup', this.onMouseup);
       document.body.addEventListener('mouseover', this.onMouseOver);
       document.body.addEventListener('contextmenu', this.preventContextMenu);
-      this.store.gridScrollZone.append();
+      this.store.interactionModule.gridScrollZone.append();
       this.emitChange();
     }
   };
@@ -134,7 +134,7 @@ export class GridSelection {
     document.body.removeEventListener('mouseover', this.onMouseOver);
     document.body.removeEventListener('mouseup', this.onMouseup);
     document.body.removeEventListener('contextmenu', this.preventContextMenu);
-    this.store.gridScrollZone.remove();
+    this.store.interactionModule.gridScrollZone.remove();
   };
 
   emitChange() {
@@ -146,6 +146,6 @@ export class GridSelection {
     document.body.removeEventListener('contextmenu', this.preventContextMenu);
     document.body.removeEventListener('mouseup', this.onMouseup);
     document.body.removeEventListener('mouseover', this.onMouseOver);
-    this.store.gridScrollZone.remove();
+    this.store.interactionModule.gridScrollZone.remove();
   }
 }

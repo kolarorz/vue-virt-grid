@@ -11,7 +11,7 @@ const checkAndGetThInfo = (e: MouseEvent, gridStore: GridStore) => {
   if (thEl) {
     const colId = (thEl as HTMLElement).dataset.id;
     if (colId === undefined) return;
-    const targetColumnData = gridStore.columnsInfo.headerCellInfo[colId];
+    const targetColumnData = gridStore.columnModule.columnsInfo.headerCellInfo[colId];
     return {
       event: e,
       column: targetColumnData,
@@ -35,7 +35,7 @@ const checkAndGetTdInfo = (event: MouseEvent, gridStore: GridStore) => {
     if (rowIdx === undefined || colIdx === undefined) return;
     const rowIdxNum = +rowIdx;
     const colIdxNum = +colIdx;
-    const targetColumn = gridStore.flattedColumns[colIdxNum];
+    const targetColumn = gridStore.columnModule.flattedColumns[colIdxNum];
     const targetRow = gridStore.originList[rowIdxNum];
     if (targetColumn && targetRow) {
       return {
@@ -107,14 +107,14 @@ export const useContentEvent = (gridStore: GridStore) => {
     // console.log(targetTd, targetTd?.dataset.rowidx, targetTd?.dataset.colidx);
 
     if (targetTd?.dataset.rowidx !== undefined) {
-      gridStore.setSelectRow(Number(targetTd?.dataset.rowidx));
+      gridStore.interactionModule.setSelectRow(Number(targetTd?.dataset.rowidx));
     }
     if (targetTd?.dataset.colidx !== undefined) {
-      gridStore.setSelectCol(Number(targetTd?.dataset.colidx));
+      gridStore.interactionModule.setSelectCol(Number(targetTd?.dataset.colidx));
     }
-    gridStore.popperStore.remove();
+    gridStore.popperModule.remove();
     const tdData = checkAndGetTdInfo(e, gridStore);
-    gridStore.popperStore.coverRender(tdData);
+    gridStore.popperModule.coverRender(tdData);
   };
 
   // 添加一个全局的事件监听，用于删除弹出层和选中单元格
@@ -124,9 +124,9 @@ export const useContentEvent = (gridStore: GridStore) => {
         el?.classList?.contains('vtg-popper-container') || el?.classList?.contains('vtg-td'),
     );
     if (!popper) {
-      gridStore.clearSelect();
+      gridStore.interactionModule.clearSelect();
       // console.log('clearSelect');
-      gridStore.popperStore.remove();
+      gridStore.popperModule.remove();
     }
   });
 
