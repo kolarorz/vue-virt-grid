@@ -36,7 +36,7 @@
   }
 </style>
 
-## 功能
+<!-- ## 功能
 
 - [基础功能](/examples/base/)
 - [展开行](/examples/expand/)
@@ -50,4 +50,4 @@
 - [事件处理](/examples/events/)
 - [template](/examples/table/)
 - [合并](/examples/merge/)
-- [区域选中](/examples/selection/)
+- [区域选中](/examples/selection/) -->
