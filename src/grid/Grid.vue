@@ -1,5 +1,5 @@
 <template>
-  <div class="vtg-root" :class="cls.root" ref="rootRefEl">
+  <div id="vtg-root" :class="cls.root" ref="rootRefEl">
     <div class="vtg-client" ref="clientRefEl" data-id="client" :class="cls.main">
       <!-- height skeleton -->
       <div :style="`float:left; height: ${vlReactiveData.listTotalSize}px`"></div>
