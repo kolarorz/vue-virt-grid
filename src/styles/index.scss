@@ -190,8 +190,9 @@
 
 // 表格
 table.vtg-table {
-  margin: 0;
-  padding: 0;
+  // TODO 会被 .vp-doc table 样式覆盖，所以加一个优先级
+  margin: 0 !important;
+  padding: 0 !important;
   box-sizing: border-box;
 
   // 在表格内部初始化，以免影响到全局
