@@ -107,7 +107,7 @@
     }
   }
 
-  @include table-reset;
+  // @include table-reset;
   @include scrollbar;
 }
 
@@ -190,6 +190,10 @@
 
 // 表格
 table.vtg-table {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+
   // 在表格内部初始化，以免影响到全局
   // @include reset;
   display: table;
@@ -282,7 +286,11 @@ thead.vtg-header {
   }
 
   th.vtg-th {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
+    border: unset;
+
     font-weight: 600;
     border-bottom: var(--#{$prefix}-border);
     border-right: 1px solid transparent;
@@ -326,6 +334,11 @@ tbody.vtg-body {
   }
 
   td.vtg-td {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    border: unset;
+
     border-bottom: var(--#{$prefix}-border);
     border-right: 1px solid transparent;
     min-width: 0;
@@ -615,34 +628,6 @@ tbody.vtg-body {
   border: 2px solid var(--#{$prefix}-select-border-color);
 }
 
-// .vtg-popper-container-x {
-//   width: 100%;
-//   height: 100%;
-// }
-
-// TODO
-.vtg-popper-cell {
-  box-sizing: border-box;
-  text-overflow: ellipsis;
-  white-space: normal;
-  word-break: break-all;
-  // line-height: 23px;
-  padding: 8px 12px;
-
-  &.vtg-cell__index {
-    text-align: center;
-    padding: 0;
-  }
-
-  &.vtg-cell__checkbox {
-    // text-align: center;
-
-    .vtg-cell__checkbox-field {
-      margin-left: 4px;
-    }
-  }
-}
-
 .vtg-fixed-shadow {
   position: absolute;
   top: 0;
@@ -672,5 +657,33 @@ tbody.vtg-body {
 .vtg-fixed-shadow--right {
   &::before {
     box-shadow: var(--#{$prefix}-fixed-right-column);
+  }
+}
+
+// .vtg-popper-container-x {
+//   width: 100%;
+//   height: 100%;
+// }
+
+// TODO
+.vtg-popper-cell {
+  box-sizing: border-box;
+  text-overflow: ellipsis;
+  white-space: normal;
+  word-break: break-all;
+  // line-height: 23px;
+  padding: 8px 12px;
+
+  &.vtg-cell__index {
+    text-align: center;
+    padding: 0;
+  }
+
+  &.vtg-cell__checkbox {
+    // text-align: center;
+
+    .vtg-cell__checkbox-field {
+      margin-left: 4px;
+    }
   }
 }
