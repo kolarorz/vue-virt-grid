@@ -1,14 +1,8 @@
 <template>
-  <GridTable :list="list" border>
-    <GridTableColumn field="field1" title="field1" />
-    <GridTableColumn field="field2" title="field2" />
-    <GridTableColumn field="field3" title="field3" />
-    <GridTableColumn field="field4" title="field4" />
-    <GridTableColumn field="field5" title="field5" />
-  </GridTable>
+  <Grid :list="list" :columns="columns"> </Grid>
 </template>
 <script setup>
-import { GridTable, GridTableColumn } from 'vue-virt-grid';
+import { Grid } from 'vue-virt-grid';
 const list = [
   {
     id: '1',
@@ -41,6 +35,28 @@ const list = [
     field3: '43',
     field4: '44',
     field5: '45',
+  },
+];
+const columns = [
+  {
+    field: 'field1',
+    title: 'Field1',
+  },
+  {
+    field: 'field2',
+    title: 'Field2',
+  },
+  {
+    field: 'field3',
+    title: 'Field3',
+  },
+  {
+    field: 'field4',
+    title: 'Field4',
+  },
+  {
+    field: 'field5',
+    title: 'Field5',
   },
 ];
 </script>

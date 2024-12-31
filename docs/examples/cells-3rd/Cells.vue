@@ -37,7 +37,6 @@ import {
   ElTimePicker,
   ElCascader,
 } from 'element-plus';
-import 'element-plus/dist/index.css';
 import { ref } from 'vue';
 // const generateColumns = (length = 10, prefix = 'field-', props?: any) =>
 //   Array.from({ length }).map((_, columnIndex) => ({
@@ -46,6 +45,8 @@ import { ref } from 'vue';
 //     title: `Title ${columnIndex}`,
 //     width: 200,
 //   }));
+const minRowHeight = 32;
+
 const generateList = (columns: Column[], length = 10000, prefix = 'row-') =>
   Array.from({ length }).map((_, rowIndex) => {
     return columns.reduce(
@@ -143,8 +144,6 @@ function findLabelByValue(value: string, options: any[]): string | null {
   }
   return null;
 }
-
-const minRowHeight = 36;
 
 const columns: Column[] = [
   {

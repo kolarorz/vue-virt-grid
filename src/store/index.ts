@@ -80,12 +80,12 @@ export class GridStore {
   // 表格
   tableEl: HTMLElement | undefined;
 
+  virtualListRef: VirtListReturn<ListItem<Record<string, string>>> | undefined;
+
   // 记一下原始的list
   originList: ListItem[] = [];
 
   gridScrollingStatus = ref('is-scrolling-none');
-
-  virtualListRef: VirtListReturn<ListItem<Record<string, string>>> | undefined;
 
   gridRowMap: Record<string, ListItem> = {};
 
@@ -106,7 +106,7 @@ export class GridStore {
 
     // 配置
     config: {
-      minRowHeight: 36,
+      minRowHeight: defaultGridOptions.minRowHeight,
       colWidth: 100,
       // headerHeight: 30,
       // headerWidth: 100,
@@ -169,6 +169,7 @@ export class GridStore {
 
   setRowMinHeight(minRowHeight: number) {
     this.virtualListProps.minSize = minRowHeight;
+    console.log('setRowMinHeight', this.virtualListProps.minSize);
   }
 
   setRootEl(rootEl: HTMLElement | null) {
@@ -267,6 +268,7 @@ export class GridStore {
 
     this.mergeModule.setMerges(options.merges);
 
+    console.log(options.minRowHeight ?? defaultGridOptions.minRowHeight);
     this.setRowMinHeight(options.minRowHeight ?? defaultGridOptions.minRowHeight);
 
     this.setCustomRender({

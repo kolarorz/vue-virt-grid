@@ -1,8 +1,6 @@
 <template>
-  <div
-    class="vtg-cell vtg-cell__select-view"
-    :style="height ? `height: ${36}px;` : `height: auto;`"
-  >
+  <div class="vtg-cell vtg-cell__select-view">
+    <!-- :style="height ? `height: ${height}px;` : `height: auto;`" -->
     <div class="vtg-cell__select-view-content">
       <div
         class="tag-item"

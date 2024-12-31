@@ -6,6 +6,7 @@
     "baseUrl": ".",
     "jsx": "preserve",
     "composite": true,
+    "types": ["node"],
     "paths": {
       "vue-virt-grid": ["./src"],
       "@/src/*": ["./src/*"]

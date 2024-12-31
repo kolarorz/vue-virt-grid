@@ -1,8 +1,11 @@
-import { type PluginOption } from 'vite';
+// import { type PluginOption } from 'vite';
 import { defineConfig } from 'vitepress';
 import { fileURLToPath } from 'node:url';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import ElementPlus from 'unplugin-element-plus/vite';
+import AutoImport from 'unplugin-auto-import/vite';
+import Components from 'unplugin-vue-components/vite';
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
 
 // function themeCustomCss(): PluginOption {
 //   return {
@@ -169,7 +172,15 @@ export default defineConfig({
       jsxFragment: 'Fragment',
     },
     // configFile: path.resolve(__dirname, '../../scripts/dev.ts'),
-    plugins: [ElementPlus({}), vueJsx()],
+    plugins: [
+      vueJsx(),
+      AutoImport({
+        resolvers: [ElementPlusResolver()],
+      }),
+      Components({
+        resolvers: [ElementPlusResolver()],
+      }),
+    ],
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('../../', import.meta.url)),

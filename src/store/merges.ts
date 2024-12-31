@@ -101,7 +101,7 @@ export class GridMerges {
             rowIndex: rowIndexLast,
             colIndex: colIndex + colspan,
             rowspan: rowspanLast,
-            colspan: colIndexLast + colspanLast - colIndex - colspan,
+            colspan: colIndexLast + colspanLast - 1 - (colIndex + colspan - 1),
           });
         }
       });
@@ -143,12 +143,22 @@ export class GridMerges {
             colspan: colspanLast,
           });
         }
-        // 中间，中间可能有可能无
+        // 左边可能不存在
         if (colIndex > colIndexLast) {
+          // isTop 就取交叉值
+          const isTop = rowIndex < rowIndexLast;
+          // isLast 就取交叉值
+          const isLast = rowIndex + rowspan - 1 > rowIndexLast + rowspanLast - 1;
+          // TODO 要把其他顶点的都处理一下
+          // 顶点单元格独特处理
           placeCells2Left.push({
-            rowIndex: rowIndex,
+            rowIndex: isTop ? rowIndexLast : rowIndex,
             colIndex: colIndexLast,
-            rowspan: rowspan,
+            rowspan: isTop
+              ? rowIndexLast - rowIndex
+              : isLast
+                ? rowIndexLast + rowspanLast - rowIndex
+                : rowspan,
             colspan: colIndex - colIndexLast,
           });
         }
@@ -157,7 +167,7 @@ export class GridMerges {
           placeCells2Left.push({
             rowIndex: rowIndex + rowspan,
             colIndex: colIndexLast,
-            rowspan: rowIndexLast + rowspanLast - rowIndex - rowspan,
+            rowspan: rowIndexLast + rowspanLast - 1 - (rowIndex + rowspan - 1),
             colspan: colspanLast,
           });
         }
@@ -205,7 +215,7 @@ export class GridMerges {
             rowIndex: rowIndex,
             colIndex: colIndex + colspan,
             rowspan: rowspan,
-            colspan: colIndexLast + colspanLast - colIndex - colspan,
+            colspan: colIndexLast + colspanLast - 1 - (colIndex + colspan - 1),
           });
         }
         // 下边可能也不存在
@@ -213,11 +223,13 @@ export class GridMerges {
           placeCells2Right.push({
             rowIndex: rowIndex + rowspan,
             colIndex: colIndexLast,
-            rowspan: rowIndexLast + rowspanLast - rowIndex - rowspan,
+            rowspan: rowIndexLast + rowspanLast - 1 - (rowIndex + rowspan - 1),
             colspan: colspanLast,
           });
         }
       });
+
+      // console.warn('placeCells2Right', placeCells2Right);
     }
 
     // 底边
@@ -282,7 +294,14 @@ export class GridMerges {
       ...placeCells2Right,
       ...placeCells2Bottom,
     ];
+
+    // console.log('tempMerges', this.tempMerges);
+
+    // console.warn(`oys: ${oys} oye: ${oye} oxs: ${oxs} oxe: ${oxe}`);
+    // console.warn(`rys: ${rys} rye: ${rye} rxs: ${rxs} rxe: ${rxe}`);
     // 生成占位单元格信息，用于渲染优化
+
+    console.timeEnd('calcRect');
 
     if (horizontal) {
       // 手动调用render
