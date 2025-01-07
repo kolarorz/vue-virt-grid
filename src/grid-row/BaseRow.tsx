@@ -155,7 +155,7 @@ export default defineComponent({
       ],
       row: () => [
         'vtg-tr',
-        gridStore.getState('stripe') && props.rowIndex % 2 && 'vtg-tr--striped',
+        gridStore.getState('stripe') && props.rowIndex % 2 && 'is-striped',
         props.row.id === selectRowId.value && 'current-row',
         getRowClass(),
       ],

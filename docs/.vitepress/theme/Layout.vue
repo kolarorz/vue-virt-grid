@@ -17,7 +17,10 @@ const route = useRoute();
 const isPlayGround = computed(() => route.data.filePath.startsWith('playground'));
 
 const pageClass = computed(() => {
-  if (route.data.filePath.startsWith('page-api')) return 'page-api';
+  console.log('route.data.filePath.startsWith()', route.data.filePath.startsWith('api'));
+  // 为了解决 .v-doc 对 table 的样式覆盖问题
+  if (route.data.filePath.startsWith('examples')) return 'page-examples';
+  if (route.data.filePath.startsWith('api')) return 'page-api';
   return '';
 });
 </script>

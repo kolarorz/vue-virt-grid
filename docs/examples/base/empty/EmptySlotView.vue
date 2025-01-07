@@ -1,7 +1,9 @@
 <template>
   <div class="base-view">
     <div style="width: 100%; height: 600px; border: 2px solid var(--el-color-border)">
-      <Grid :columns="columns" :list="list" :options="{ showHeader: false, border: true }"></Grid>
+      <Grid :columns="columns" :list="list">
+        <template #empty>怎么没有数据呢？</template>
+      </Grid>
     </div>
   </div>
 </template>
@@ -16,22 +18,8 @@ const generateColumns = (length = 10, prefix = 'field-', props?: any) =>
     width: 200,
   }));
 
-const generateList = (columns: ReturnType<typeof generateColumns>, length = 200, prefix = 'row-') =>
-  Array.from({ length }).map((_, rowIndex) => {
-    return columns.reduce(
-      (rowData, column, columnIndex) => {
-        rowData[column.field] = `Row ${rowIndex} - Field ${columnIndex}`;
-        return rowData;
-      },
-      {
-        id: `${prefix}${rowIndex}`,
-        parentId: null,
-      },
-    );
-  });
-
 const columns: Column[] = [...generateColumns(10)];
-const list: ListItem[] = generateList(columns, 20);
+const list: ListItem[] = [];
 </script>
 <style lang="scss">
 .base-view {

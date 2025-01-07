@@ -5,6 +5,7 @@
       <div :style="`float:left; height: ${vlReactiveData.listTotalSize}px`"></div>
       <!-- table main -->
       <table
+        id="vtg-table"
         :class="cls.table"
         cellspacing="0"
         cellpadding="0"
@@ -236,7 +237,7 @@ const cls = computed(() => ({
     gridStore.getState('highlightSelectCol') ? 'vtg-client--highlight-select-col' : '',
     gridStore.getState('highlightSelectCell') ? 'vtg-client--highlight-select-cell' : '',
   ],
-  table: ['vtg-table', gridStore.gridScrollingStatus.value],
+  table: [gridStore.gridScrollingStatus.value],
   leftFixedShadow: [
     'vtg-fixed-shadow',
     gridStore.gridScrollingStatus.value !== 'is-scrolling-left' && leftFixedColumns.length > 0

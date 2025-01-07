@@ -14,6 +14,7 @@
   </div>
 </template>
 <script setup lang="tsx">
+import { ref } from 'vue';
 import { Grid, type Column, type ListItem } from 'vue-virt-grid';
 import {
   SelectCover,
@@ -37,7 +38,8 @@ import {
   ElTimePicker,
   ElCascader,
 } from 'element-plus';
-import { ref } from 'vue';
+import 'element-plus/dist/index.css';
+
 // const generateColumns = (length = 10, prefix = 'field-', props?: any) =>
 //   Array.from({ length }).map((_, columnIndex) => ({
 //     ...props,

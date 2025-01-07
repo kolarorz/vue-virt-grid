@@ -70,23 +70,6 @@
   }
 }
 
-@mixin table-reset {
-  // 初始化表格样式
-  table,
-  thead,
-  tbody,
-  tfoot,
-  th,
-  tr,
-  td {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    // 不能用表格的边框，样式不好看
-    border: unset;
-  }
-}
-
 // 顶层元素
 #vtg-root {
   width: 100%;
@@ -99,15 +82,16 @@
   // 放在这里popper的计算才会正确
   &.vtg-root--border {
     border-color: var(--#{$prefix}-border-color);
-    th.vtg-th {
-      border-color: var(--#{$prefix}-border-color);
-    }
-    td.vtg-td {
-      border-color: var(--#{$prefix}-border-color);
+    table#vtg-table {
+      th.vtg-th {
+        border-color: var(--#{$prefix}-border-color);
+      }
+      td.vtg-td {
+        border-color: var(--#{$prefix}-border-color);
+      }
     }
   }
 
-  // @include table-reset;
   @include scrollbar;
 }
 
@@ -188,16 +172,12 @@
   color: var(--#{$prefix}-header-text-color);
 }
 
-// 表格
-table.vtg-table {
-  // TODO 会被 .vp-doc table 样式覆盖，所以加一个优先级
-  margin: 0 !important;
-  padding: 0 !important;
-  box-sizing: border-box;
-
-  // 在表格内部初始化，以免影响到全局
-  // @include reset;
+// 在表格内部初始化，以免影响到全局
+table#vtg-table {
   display: table;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
   // 解决列冻结border问题
   border-collapse: separate;
   min-width: 100%;
@@ -272,254 +252,302 @@ table.vtg-table {
       }
     }
   }
-}
 
-// 表头属性
-thead.vtg-header {
-  z-index: 6;
-  position: sticky;
-  top: 0;
-  background-color: var(--#{$prefix}-header-bg-color);
-  color: var(--#{$prefix}-header-text-color);
+  // 表头属性
+  thead.vtg-header {
+    z-index: 6;
+    position: sticky;
+    top: 0;
+    background-color: var(--#{$prefix}-header-bg-color);
+    color: var(--#{$prefix}-header-text-color);
 
-  tr.vtg-tr {
-    box-sizing: border-box;
-  }
-
-  th.vtg-th {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    border: unset;
-
-    font-weight: 600;
-    border-bottom: var(--#{$prefix}-border);
-    border-right: 1px solid transparent;
-    height: 36px;
-    min-width: 0;
-    text-overflow: ellipsis;
-    vertical-align: middle;
-    position: relative;
-    text-align: left;
-    z-index: 1;
-
-    .vtg-th-cell {
-      padding: 8px 12px;
+    tr.vtg-tr {
+      box-sizing: border-box;
     }
 
-    &.is-fixed {
-      z-index: 4;
-      position: sticky;
-      background-color: var(--#{$prefix}-header-bg-color);
+    th.vtg-th {
+      display: table-cell;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-weight: 600;
+      border-top: none;
+      border-left: none;
+      border-bottom: var(--#{$prefix}-border);
+      border-right: 1px solid transparent;
+      height: 36px;
+      min-width: 0;
+      text-overflow: ellipsis;
+      vertical-align: middle;
+      position: relative;
+      text-align: left;
+      z-index: 1;
+
+      .vtg-th-cell {
+        padding: 8px 12px;
+      }
+
+      &.is-fixed {
+        z-index: 4;
+        position: sticky;
+        background-color: var(--#{$prefix}-header-bg-color);
+      }
     }
   }
-}
 
-// 表格内容
-tbody.vtg-body {
-  tr.vtg-tr {
-    box-sizing: border-box;
-    background-color: var(--#{$prefix}-tr-bg-color);
+  // 表格内容
+  tbody.vtg-body {
+    tr.vtg-tr {
+      // 初始化
+      border: none;
+      box-sizing: border-box;
 
-    &.vtg-tr--striped {
-      td.vtg-td {
-        background-color: var(--#{$prefix}-row-stripe-bg-color);
+      &.is-striped {
+        td.vtg-td {
+          background-color: var(--#{$prefix}-row-stripe-bg-color);
+        }
+      }
+
+      &:hover {
+        td.vtg-td.vtg-td--expand {
+          background-color: var(--#{$prefix}-expanded-cell-bg-color);
+        }
       }
     }
 
-    &:hover {
-      td.vtg-td.vtg-td--expand {
+    td.vtg-td {
+      display: table-cell;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+
+      border-bottom: var(--#{$prefix}-border);
+      border-right: 1px solid transparent;
+      min-width: 0;
+      text-overflow: ellipsis;
+      vertical-align: middle;
+      position: relative;
+      text-align: left;
+      z-index: 1;
+
+      // 文本溢出隐藏
+      &.overflow-ellipsis {
+        div.vtg-cell {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+      }
+
+      &:has(.vtg-cell__index) {
+        z-index: var(--#{$prefix}-index);
+      }
+
+      &.vtg-td--expand {
         background-color: var(--#{$prefix}-expanded-cell-bg-color);
       }
-    }
-  }
 
-  td.vtg-td {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    border: unset;
-
-    border-bottom: var(--#{$prefix}-border);
-    border-right: 1px solid transparent;
-    min-width: 0;
-    box-sizing: border-box;
-    text-overflow: ellipsis;
-    vertical-align: middle;
-    position: relative;
-    text-align: left;
-    z-index: 1;
-
-    &:has(.vtg-cell__index) {
-      z-index: var(--#{$prefix}-index);
-    }
-
-    &.vtg-td--expand {
-      background-color: var(--#{$prefix}-expanded-cell-bg-color);
-    }
-
-    &.vtg-td--group {
-      div.vtg-cell {
-        display: flex;
-        align-items: center;
-        width: 100%;
-      }
-    }
-
-    &.is-fixed {
-      z-index: 4;
-      position: sticky;
-      background-color: var(--#{$prefix}-bg-color);
-    }
-
-    // 框选
-    &.box-selection {
-      z-index: 2;
-      background-color: var(--#{$prefix}-select-bg-color) !important;
-
-      &::after {
-        display: block;
-        content: ' ';
-        z-index: -1;
-        position: absolute;
-        pointer-events: none;
-        height: calc(100% + 2px);
-        width: calc(100% + 2px);
-        left: -1px;
-        box-sizing: border-box;
-        top: -1px;
-        border: 0 solid var(--#{$prefix}-select-border-color);
-      }
-
-      &.box-selection__left-top {
-        &::after {
-          border-left-width: 2px;
-          border-top-width: 2px;
+      &.vtg-td--group {
+        div.vtg-cell {
+          display: flex;
+          align-items: center;
+          width: 100%;
         }
       }
 
-      &.box-selection__top {
-        &::after {
-          border-top-width: 2px;
-        }
+      &.is-fixed {
+        z-index: 4;
+        position: sticky;
+        background-color: var(--#{$prefix}-bg-color);
       }
 
-      &.box-selection__right-top {
-        &::after {
-          border-right-width: 2px;
-          border-top-width: 2px;
-        }
-      }
+      // 框选
+      &.box-selection {
+        z-index: 2;
+        background-color: var(--#{$prefix}-select-bg-color) !important;
 
-      &.box-selection__right {
         &::after {
-          border-right-width: 2px;
+          display: block;
+          content: ' ';
+          z-index: -1;
+          position: absolute;
+          pointer-events: none;
+          height: calc(100% + 2px);
+          width: calc(100% + 2px);
+          left: -1px;
+          box-sizing: border-box;
+          top: -1px;
+          border: 0 solid var(--#{$prefix}-select-border-color);
         }
-      }
 
-      &.box-selection__right-bottom {
-        &::after {
-          border-right-width: 2px;
-          border-bottom-width: 2px;
+        &.box-selection__left-top {
+          &::after {
+            border-left-width: 2px;
+            border-top-width: 2px;
+          }
         }
-      }
 
-      &.box-selection__bottom {
-        &::after {
-          border-bottom-width: 2px;
+        &.box-selection__top {
+          &::after {
+            border-top-width: 2px;
+          }
         }
-      }
 
-      &.box-selection__left-bottom {
-        &::after {
-          border-left-width: 2px;
-          border-bottom-width: 2px;
+        &.box-selection__right-top {
+          &::after {
+            border-right-width: 2px;
+            border-top-width: 2px;
+          }
         }
-      }
 
-      &.box-selection__left {
-        &::after {
-          border-left-width: 2px;
+        &.box-selection__right {
+          &::after {
+            border-right-width: 2px;
+          }
+        }
+
+        &.box-selection__right-bottom {
+          &::after {
+            border-right-width: 2px;
+            border-bottom-width: 2px;
+          }
+        }
+
+        &.box-selection__bottom {
+          &::after {
+            border-bottom-width: 2px;
+          }
+        }
+
+        &.box-selection__left-bottom {
+          &::after {
+            border-left-width: 2px;
+            border-bottom-width: 2px;
+          }
+        }
+
+        &.box-selection__left {
+          &::after {
+            border-left-width: 2px;
+          }
         }
       }
     }
-  }
 
-  // 文本溢出隐藏
-  td.overflow-ellipsis {
+    // 单元格
     div.vtg-cell {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-  }
-
-  div.vtg-cell {
-    box-sizing: border-box;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    white-space: normal;
-    word-break: break-all;
-    // padding: 6px 12px;
-    padding: 0 12px;
-  }
-
-  // 空白填充
-  .placement {
-    width: 20px;
-    height: 100%;
-
-    display: flex;
-    justify-content: center;
-
-    &.placement--tree-line::before {
-      content: ' ';
-      position: absolute;
-      border-right: 1px dashed var(--#{$prefix}-tree-line-color);
+      box-sizing: border-box;
+      width: 100%;
       height: 100%;
-      width: 2px;
-      top: 0;
+      display: flex;
+      align-items: center;
+      white-space: normal;
+      word-break: break-all;
+      // padding: 6px 12px;
+      padding: 0 12px;
     }
 
-    &.placement--last-tree-node::before {
-      height: 50%;
+    // 空白填充
+    .placement {
+      width: 20px;
+      height: 100%;
+
+      display: flex;
+      justify-content: center;
+
+      &.placement--tree-line::before {
+        content: ' ';
+        position: absolute;
+        border-right: 1px dashed var(--#{$prefix}-tree-line-color);
+        height: 100%;
+        width: 2px;
+        top: 0;
+      }
+
+      &.placement--last-tree-node::before {
+        height: 50%;
+      }
+
+      &.placement--last-padding::after {
+        content: ' ';
+        position: absolute;
+        border-top: 1px dashed var(--#{$prefix}-tree-line-color);
+        height: 0;
+        width: 8px;
+        transform: translateX(5px);
+      }
     }
 
-    &.placement--last-padding::after {
-      content: ' ';
-      position: absolute;
-      border-top: 1px dashed var(--#{$prefix}-tree-line-color);
-      height: 0;
-      width: 8px;
-      transform: translateX(5px);
+    // 分组icon
+    .group-icon {
+      width: 28px;
+      height: 28px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 16px;
+      transform: rotate(0deg);
+      transition: transform 0.2s ease-in-out;
+      cursor: pointer;
+
+      &.group-icon--expand {
+        transform: rotate(90deg);
+      }
     }
-  }
 
-  // 分组icon
-  .group-icon {
-    width: 28px;
-    height: 28px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 16px;
-    transform: rotate(0deg);
-    transition: transform 0.2s ease-in-out;
-    cursor: pointer;
+    // 树形节点icon
+    .tree-leading {
+      width: 20px;
+      height: 100%;
 
-    &.group-icon--expand {
-      transform: rotate(90deg);
+      .tree-leading-icon {
+        width: 20px;
+        height: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 16px;
+        transform: rotate(0deg);
+        transition: transform 0.2s ease-in-out;
+        cursor: pointer;
+
+        &.tree-leading-icon--expand {
+          transform: rotate(90deg);
+        }
+      }
+
+      &.tree-leading--tree-line::after {
+        display: block;
+      }
+
+      &.tree-leading--tree-line-hide::after {
+        display: none;
+      }
+
+      &.tree-leading--first-node:not(:has(.tree-leading-icon)) {
+        display: none;
+      }
+
+      &:not(:has(.tree-leading-icon))::after {
+        content: ' ';
+        border-top: 1px dashed var(--#{$prefix}-tree-line-color);
+        position: absolute;
+        width: 8px;
+        height: 0;
+      }
+
+      &:has(.tree-leading-icon--expand)::after {
+        content: ' ';
+        border-right: 1px dashed var(--#{$prefix}-tree-line-color);
+        position: absolute;
+        width: 2px;
+        height: calc(50% - 10px);
+        transform: translateX(9px);
+      }
     }
-  }
 
-  // 树形节点icon
-  .tree-leading {
-    width: 20px;
-    height: 100%;
-
-    .tree-leading-icon {
+    // 展开行icon
+    .row-expand-icon {
       width: 20px;
       height: 20px;
       display: flex;
@@ -530,55 +558,9 @@ tbody.vtg-body {
       transition: transform 0.2s ease-in-out;
       cursor: pointer;
 
-      &.tree-leading-icon--expand {
+      &.row-expand-icon--expand {
         transform: rotate(90deg);
       }
-    }
-
-    &.tree-leading--tree-line::after {
-      display: block;
-    }
-
-    &.tree-leading--tree-line-hide::after {
-      display: none;
-    }
-
-    &.tree-leading--first-node:not(:has(.tree-leading-icon)) {
-      display: none;
-    }
-
-    &:not(:has(.tree-leading-icon))::after {
-      content: ' ';
-      border-top: 1px dashed var(--#{$prefix}-tree-line-color);
-      position: absolute;
-      width: 8px;
-      height: 0;
-    }
-
-    &:has(.tree-leading-icon--expand)::after {
-      content: ' ';
-      border-right: 1px dashed var(--#{$prefix}-tree-line-color);
-      position: absolute;
-      width: 2px;
-      height: calc(50% - 10px);
-      transform: translateX(9px);
-    }
-  }
-
-  // 展开行icon
-  .row-expand-icon {
-    width: 20px;
-    height: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 16px;
-    transform: rotate(0deg);
-    transition: transform 0.2s ease-in-out;
-    cursor: pointer;
-
-    &.row-expand-icon--expand {
-      transform: rotate(90deg);
     }
   }
 }

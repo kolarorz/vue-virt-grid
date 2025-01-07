@@ -1,8 +1,12 @@
 # 溢出隐藏(TODO: title 和 tooltip 还没实现)
 
-> `showOverflow=ellipsis`
-> ellipsis 当内容溢出时显示为省略号
-> title 当内容溢出时显示为省略号并用原生 title 显示
-> tooltip 当内容溢出时显示为省略号并用 tooltip 显示
+```ts
+// ellipsis 当内容溢出时显示为省略号
+// title 当内容溢出时显示为省略号并用原生 title 显示
+// tooltip 当内容溢出时显示为省略号并用 tooltip 显示
+interface Options {
+  showOverflow: 'ellipsis' | 'title' | 'tooltip';
+}
+```
 
 <!<< ./OverflowView.vue

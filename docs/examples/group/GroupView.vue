@@ -45,6 +45,7 @@
 import { reactive, ref } from 'vue';
 import { Grid, type Column, type ListItem, CellType } from 'vue-virt-grid';
 import { ElButton, ElSelect, ElOption } from 'element-plus';
+import 'element-plus/dist/index.css';
 
 const columns: Column[] = [
   { field: 'field1', title: 'title1', type: CellType.Text, width: 200 },
