@@ -6,7 +6,7 @@
         :list="list"
         :options="{
           border: true,
-          showOverflow: 'ellipsis',
+          textOverflow: 'ellipsis',
           minRowHeight: minRowHeight,
         }"
       ></Grid>

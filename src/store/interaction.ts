@@ -1,10 +1,10 @@
 import { ref, shallowReactive } from 'vue';
-import type { GridStore } from '.';
-import { CellType, type Column, type SelectedCells } from '../type';
-import { useTableEvent } from '../hooks/useEvent';
 import { nanoid } from 'nanoid';
-import { GridSelection } from '../interaction/selection';
-import { GridScrollZone } from '../interaction/scrollZone';
+import type { GridStore } from '.';
+import { CellType, type Column, type SelectedCells } from '@/src/type';
+import { useTableEvent } from '@/src/hooks/useEvent';
+import { GridSelection } from '@/src/interaction/selection';
+import { GridScrollZone } from '@/src/interaction/scrollZone';
 
 export type ISelectionBorderPos =
   | 'left-top'

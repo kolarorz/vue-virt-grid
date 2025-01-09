@@ -1,6 +1,6 @@
 import { cloneDeep, isEqual } from 'lodash-es';
-import type { GridStore } from '../store';
-import { getCellFromEvent } from '../utils/getCellFromEvent';
+import type { GridStore } from '@/src/store';
+import { getCellFromEvent } from '@/src/utils/getCellFromEvent';
 import { nanoid } from 'nanoid';
 
 export class GridSelection {

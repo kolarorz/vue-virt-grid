@@ -35,10 +35,12 @@ export type Column = {
   resizable?: boolean;
   // 是否固定
   fixed?: 'left' | 'right' | '';
-  // 列对齐方式
-  align?: 'left' | 'right' | 'center';
-  // 表头对齐方式，如无，生效align
-  headerAlign?: 'left' | 'right' | 'center';
+  // 水平对齐方式
+  align?: 'left' | 'center' | 'right';
+  headerAlign?: 'left' | 'center' | 'right';
+  // 垂直对齐方式
+  verticalAlign?: 'top' | 'middle' | 'bottom';
+  headerVerticalAlign?: 'top' | 'middle' | 'bottom';
   // 嵌套列
   children?: Column[];
   // 列的class
@@ -275,13 +277,21 @@ export interface SelectedCells {
 export interface TableOptions {
   rowKey?: string | number;
   minRowHeight?: number;
-  showOverflow?: '' | 'ellipsis' | 'tooltip';
+  textOverflow?: 'ellipsis' | 'title' | 'tooltip';
+  textOverflowHeader?: 'ellipsis' | 'title' | 'tooltip';
 
   showHeader?: boolean;
   // TODO 最好分开 树形 or 分组
   defaultExpandAll?: boolean;
   // 是否显示border
   border?: boolean;
+  // 水平对齐方式
+  align?: 'left' | 'center' | 'right';
+  headerAlign?: 'left' | 'center' | 'right';
+  // 垂直对齐方式
+  verticalAlign?: 'top' | 'middle' | 'bottom';
+  headerVerticalAlign?: 'top' | 'middle' | 'bottom';
+
   // 是否显示斑马纹
   stripe?: boolean;
   // TODO 样式要重写 是否显示树形线

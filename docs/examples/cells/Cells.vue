@@ -9,7 +9,7 @@
           highlightSelectRow: true,
           highlightSelectCol: true,
           highlightSelectCell: true,
-          showOverflow: 'ellipsis',
+          textOverflow: 'ellipsis',
           ...customConfig,
           minRowHeight: minRowHeight,
         }"

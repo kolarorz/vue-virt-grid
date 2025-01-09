@@ -29,7 +29,7 @@
           :style="`height: ${headerHeight}px;`"
           v-if="gridStore.getState('showHeader')"
         >
-          <GridHeader></GridHeader>
+          <Header></Header>
         </thead>
         <tbody class="vtg-body">
           <!-- TODO 未来这里会给顶部滚动行的渲染 -->
@@ -96,28 +96,25 @@ import { onMounted, ref, watch, computed, onBeforeUnmount } from 'vue';
 import { useVirtList } from 'vue-virt-list';
 import { GridStore, useGridStore } from '@/src/store';
 import { useContentEvent } from '@/src/hooks/useEvent';
-
-import GridHeader from '@/src/grid-header/GridHeader.vue';
-// import GridHeader from '@/src/grid-header/GridHeader';
-// import BaseRow from '@/src/grid-row/BaseRow.vue';
-import BaseRow from '@/src/grid-row/BaseRow';
-import GroupRow from '@/src/grid-row/GroupRow.vue';
-import ExpandRow from '@/src/grid-row/ExpandRow.vue';
+import Header from '@/src/table/header/Header.vue';
+import BaseRow from '@/src/table/row/BaseRow';
+import GroupRow from '@/src/table/row/GroupRow.vue';
+import ExpandRow from '@/src/table/row/ExpandRow.vue';
 import {
   RowEventEnum,
+  CellEventEnum,
+  HeaderEventEnum,
+  TableEventEnum,
   type CellEmits,
   type RowEmits,
   type TableEmits,
-  CellEventEnum,
   type HeaderEmits,
-  HeaderEventEnum,
   type ListItem,
   type MergeCell,
-  TableEventEnum,
   type Column,
   type TableOptions,
 } from '@/src/type';
-import { clearResizeLine } from '../hooks/useResizeColumn';
+import { clearResizeLine } from '@/src/hooks/useResizeColumn';
 
 const emits = defineEmits<CellEmits & RowEmits & HeaderEmits & TableEmits>();
 

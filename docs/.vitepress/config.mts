@@ -68,6 +68,7 @@ export default defineConfig({
                 { text: '溢出隐藏', link: '/examples/base/overflow/' },
                 { text: '高亮', link: '/examples/base/highlight/' },
                 { text: '冻结列', link: '/examples/base/fixed/' },
+                { text: '对齐方式', link: '/examples/base/align/' },
                 { text: '索引', link: '/examples/base/index-view/' },
                 { text: '单选框', link: '/examples/base/radio/' },
                 { text: '复选框', link: '/examples/base/checkbox/' },

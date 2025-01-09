@@ -1,4 +1,4 @@
-import type { GridStore } from '../store';
+import type { GridStore } from '@/src/store';
 
 export class GridScrollZone {
   container?: HTMLElement;

@@ -1,7 +1,7 @@
 import { reactive, shallowReactive } from 'vue';
 import type { GridStore } from '.';
-import type { Column, ColumnItem } from '../type';
-import { formatColumns, type HeaderCellInfo } from '../utils/column';
+import type { Column, ColumnItem } from '@/src/type';
+import { formatColumns, type HeaderCellInfo } from '@/src/utils/column';
 
 export interface IColumnsRenderInfo {
   leftFixedColumns: ColumnItem[];

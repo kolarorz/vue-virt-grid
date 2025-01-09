@@ -1,5 +1,5 @@
 <template>
-  <div class="vtg-th-cell">
+  <div class="vtg-th-cell vtg-th-cell__index">
     {{ column.title }}
   </div>
 </template>

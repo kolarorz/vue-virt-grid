@@ -7,7 +7,7 @@
 </template>
 <script lang="ts" setup>
 import { computed, Fragment, render, type Component, type VNode, getCurrentInstance } from 'vue';
-import Grid from '../grid/Grid.vue';
+import Grid from '@/src/table/VeriTable.vue';
 import {
   type CellEmits,
   type Column,
@@ -16,6 +16,7 @@ import {
   type MergeCell,
   type RowEmits,
   type TableEmits,
+  type TdData,
 } from '@/src/type';
 
 const props = defineProps<{
@@ -61,7 +62,7 @@ function initColumn(columnNode: VNode) {
   const baseProps = columnNode.props as Column;
   (Object.keys(baseProps) as (keyof Column)[]).forEach((key) => {
     // TODO 这里为啥要赋值 boolean
-    if (baseProps[key] === '') (baseProps[key] as boolean) = true;
+    if (baseProps[key] === '') (baseProps[key] as unknown as boolean) = true;
   });
 
   setupNode(columnNode);
@@ -93,8 +94,8 @@ function initColumn(columnNode: VNode) {
 
   const hasBodyRender = !columnConfig.children && !!slots.default;
   if (hasBodyRender) {
-    columnConfig.cellRender = (column: Column, row: ListItem) => {
-      return slots.default?.({ column, row })?.[0];
+    columnConfig.cellRender = (tdData: TdData) => {
+      return slots.default?.(tdData)?.[0];
     };
   }
 

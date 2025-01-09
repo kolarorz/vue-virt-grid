@@ -1,18 +1,17 @@
 <template>
-  <GridHeaderRow
+  <HeaderRow
     v-for="(currentColumn, index) in columnsInfo.leftFixedHeaderColumns"
     :key="index"
     :currentColumn="currentColumn"
     :headerRowIndex="index"
     :centerColumnsInfo="centerColumnsInfo"
   >
-  </GridHeaderRow>
+  </HeaderRow>
 </template>
 <script lang="ts" setup>
 import { computed } from 'vue';
 import { useGridStore } from '@/src/store';
-import GridHeaderRow from './GridHeaderRow.vue';
-// import GridHeaderRow from './GridHeaderRow';
+import HeaderRow from './HeaderRow.vue';
 import type { ColumnItem } from '@/src/type';
 
 const gridStore = useGridStore();

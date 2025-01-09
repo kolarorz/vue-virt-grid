@@ -39,7 +39,10 @@ const generateList = (columns: ReturnType<typeof generateColumns>, length = 200,
     );
   });
 
-const columns: Column[] = [{ type: 'index', width: 50, fixed: 'left' }, ...generateColumns(20)];
+const columns: Column[] = [
+  { type: 'index', width: 50, title: '#', fixed: 'left' },
+  ...generateColumns(20),
+];
 const list: ListItem[] = generateList(columns, 5000);
 </script>
 <style lang="scss">

@@ -39,7 +39,7 @@ const generateList = (columns: ReturnType<typeof generateColumns>, length = 200,
   });
 
 const columns: Column[] = [
-  { type: 'index', width: 50, fixed: 'left', index: (index: number) => `x-${index}` },
+  { type: 'index', width: 50, title: '#', fixed: 'left', index: (index: number) => `x-${index}` },
   ...generateColumns(20),
 ];
 const list: ListItem[] = generateList(columns, 5000);

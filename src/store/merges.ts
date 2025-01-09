@@ -1,8 +1,8 @@
 import { reactive } from 'vue';
-import type { GridStore } from '.';
-import type { MergeCell } from '../type';
 import { isEqual, unionWith } from 'lodash-es';
-import { calcRenderRect } from '../utils/merge';
+import type { GridStore } from '.';
+import type { MergeCell } from '@/src/type';
+import { calcRenderRect } from '@/src/utils/merge';
 
 export type BodyMergeMap = Record<string, Record<string, MergeCell>>;
 

@@ -8,9 +8,7 @@
       <th
         :data-id="column._id"
         :class="cls.leftFixed(column)"
-        :style="`text-align: ${column.headerAlign || column.align}; left: ${
-          headerCellInfo[column._id].fixOffset
-        }px; ${getCellStyle(column)}`"
+        :style="`left: ${headerCellInfo[column._id].fixOffset}px; ${getCellStyle(column)}`"
         :rowspan="headerCellInfo[column._id]?.rowspan"
         :colspan="headerCellInfo[column._id]?.colspan"
       >
@@ -23,7 +21,7 @@
     <template v-for="column in centerColumnsInfo[headerRowIndex]" :key="column.field">
       <th
         :class="cls.main(column)"
-        :style="`text-align: ${column.headerAlign || column.align}; ${getCellStyle(column)}`"
+        :style="`${getCellStyle(column)}`"
         :data-id="column._id"
         :rowspan="headerCellInfo[column._id]?.rowspan"
         :colspan="headerCellInfo[column._id]?.colspan"
@@ -55,12 +53,11 @@
 import { computed, ref, onUpdated } from 'vue';
 import { useGridStore } from '@/src/store';
 import { CellType, type ColumnItem } from '@/src/type';
-
-import IndexHeaderCell from './cell/IndexHeaderCell.vue';
-// import OrderHeaderCell from './cell/OrderHeaderCell.vue';
-import CheckboxHeaderCell from './cell/CheckboxHeaderCell.vue';
-import TextHeaderCell from './cell/TextHeaderCell.vue';
 import { useResizeColumn } from '@/src/hooks/useResizeColumn';
+import HeaderIndexCell from './cell/HeaderIndexCell.vue';
+// import HeaderOrderCell from './cell/HeaderOrderCell.vue';
+import HeaderCheckboxCell from './cell/HeaderCheckboxCell.vue';
+import HeaderTextCell from './cell/HeaderTextCell.vue';
 
 const gridStore = useGridStore();
 
@@ -74,16 +71,31 @@ const centerNormalHeaderColumns = computed(() => columnsInfo.centerNormalHeaderC
 const cls = {
   leftFixed: (column: ColumnItem) => [
     'vtg-th',
+    `vtg-th--${column?.headerAlign ?? gridStore.getState('headerAlign') ?? 'left'}`,
+    `vtg-th--${column?.headerVerticalAlign ?? gridStore.getState('headerVerticalAlign') ?? 'middle'}`,
+    gridStore.getState('textOverflowHeader') ? 'vtg-th--text-ellipsis' : '',
+
     'is-fixed',
     'is-fixed--left',
     getCellClass(column),
     column.className,
   ],
   leftPadding: () => ['vtg-th'],
-  main: (column: ColumnItem) => ['vtg-th', getCellClass(column), column.className],
+  main: (column: ColumnItem) => [
+    'vtg-th',
+    `vtg-th--${column?.headerAlign ?? gridStore.getState('headerAlign') ?? 'left'}`,
+    `vtg-th--${column?.headerVerticalAlign ?? gridStore.getState('headerVerticalAlign') ?? 'middle'}`,
+    gridStore.getState('textOverflowHeader') ? 'vtg-th--text-ellipsis' : '',
+    getCellClass(column),
+    column.className,
+  ],
   rightPadding: () => ['vtg-th'],
   rightFixed: (column: ColumnItem) => [
     'vtg-th',
+    `vtg-th--${column?.headerAlign ?? gridStore.getState('headerAlign') ?? 'left'}`,
+    `vtg-th--${column?.headerVerticalAlign ?? gridStore.getState('headerVerticalAlign') ?? 'middle'}`,
+    gridStore.getState('textOverflowHeader') ? 'vtg-th--text-ellipsis' : '',
+
     'is-fixed',
     'is-fixed--right',
     getCellClass(column),
@@ -198,20 +210,20 @@ onUpdated(() => {
 function getRenderCell(column: ColumnItem) {
   // 如果是被合并的就不要显示任何单元格内容
   // if (headerRowIndex !== undefined && props.columns[headerRowIndex]?.isPlaceholder) {
-  //   return TextHeaderCell;
+  //   return HeaderTextCell;
   // }
   switch (column.type) {
     case CellType.Index:
-      return IndexHeaderCell;
+      return HeaderIndexCell;
     case CellType.Checkbox:
-      return CheckboxHeaderCell;
+      return HeaderCheckboxCell;
     case CellType.Radio:
-      return TextHeaderCell;
+      return HeaderTextCell;
     // case CellType.orderCheckbox:
-    //   return OrderHeaderCell;
+    //   return HeaderOrderCell;
     default:
       if (column?.headerRender) return column?.headerRender?.(column);
-      return TextHeaderCell;
+      return HeaderTextCell;
   }
 }
 </script>

@@ -93,6 +93,16 @@
   }
 
   @include scrollbar;
+
+  p {
+    margin: 0;
+    padding: 0;
+  }
+
+  span {
+    margin: 0;
+    padding: 0;
+  }
 }
 
 // 主体容器
@@ -155,21 +165,6 @@
       }
     }
   }
-}
-
-.vtg-mask {
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  position: absolute;
-  left: 0;
-  top: 0;
-  pointer-events: none;
-  user-select: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: var(--#{$prefix}-header-text-color);
 }
 
 // 在表格内部初始化，以免影响到全局
@@ -283,8 +278,54 @@ table#vtg-table {
       text-align: left;
       z-index: 1;
 
-      .vtg-th-cell {
-        padding: 8px 12px;
+      // 对齐方式
+      &.vtg-th--left {
+        div.vtg-th-cell {
+          justify-content: flex-start;
+          span {
+            text-align: left;
+          }
+        }
+      }
+      &.vtg-th--center {
+        div.vtg-th-cell {
+          justify-content: center;
+          span {
+            text-align: center;
+          }
+        }
+      }
+      &.vtg-th--right {
+        div.vtg-th-cell {
+          justify-content: flex-end;
+          span {
+            text-align: right;
+          }
+        }
+      }
+      &.vtg-th--top {
+        div.vtg-th-cell {
+          align-items: flex-start;
+        }
+      }
+      &.vtg-th--middle {
+        div.vtg-th-cell {
+          align-items: center;
+        }
+      }
+      &.vtg-th--bottom {
+        div.vtg-th-cell {
+          align-items: flex-end;
+        }
+      }
+
+      // 文本溢出隐藏
+      &.vtg-th--text-ellipsis {
+        div.vtg-th-cell__text span {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
       }
 
       &.is-fixed {
@@ -292,6 +333,17 @@ table#vtg-table {
         position: sticky;
         background-color: var(--#{$prefix}-header-bg-color);
       }
+    }
+
+    div.vtg-th-cell {
+      box-sizing: border-box;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      white-space: normal;
+      word-break: break-all;
+      padding: 0 12px;
     }
   }
 
@@ -324,15 +376,55 @@ table#vtg-table {
       border-bottom: var(--#{$prefix}-border);
       border-right: 1px solid transparent;
       min-width: 0;
-      text-overflow: ellipsis;
       vertical-align: middle;
       position: relative;
       text-align: left;
       z-index: 1;
 
-      // 文本溢出隐藏
-      &.overflow-ellipsis {
+      // 对齐方式
+      &.vtg-td--left {
         div.vtg-cell {
+          justify-content: flex-start;
+          span {
+            text-align: left;
+          }
+        }
+      }
+      &.vtg-td--center {
+        div.vtg-cell {
+          justify-content: center;
+          span {
+            text-align: center;
+          }
+        }
+      }
+      &.vtg-td--right {
+        div.vtg-cell {
+          justify-content: flex-end;
+          span {
+            text-align: right;
+          }
+        }
+      }
+      &.vtg-td--top {
+        div.vtg-cell {
+          align-items: flex-start;
+        }
+      }
+      &.vtg-td--middle {
+        div.vtg-cell {
+          align-items: center;
+        }
+      }
+      &.vtg-td--bottom {
+        div.vtg-cell {
+          align-items: flex-end;
+        }
+      }
+
+      // 文本溢出隐藏
+      &.vtg-td--text-ellipsis {
+        div.vtg-cell__text span {
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
@@ -443,7 +535,6 @@ table#vtg-table {
       align-items: center;
       white-space: normal;
       word-break: break-all;
-      // padding: 6px 12px;
       padding: 0 12px;
     }
 
@@ -579,13 +670,9 @@ table#vtg-table {
   }
 }
 
-.vtg-cell__index {
-  // padding: 0;
-  // display: flex;
-  // align-items: center;
-}
-
 .vtg-cell__checkbox {
+  justify-content: center;
+
   input {
     margin: 0;
     padding: 0;
@@ -598,6 +685,20 @@ table#vtg-table {
   }
 }
 
+.vtg-mask {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  position: absolute;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+  user-select: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--#{$prefix}-header-text-color);
+}
 // popper
 .vtg-popper-container {
   z-index: 5;
@@ -658,13 +759,10 @@ table#vtg-table {
   padding: 8px 12px;
 
   &.vtg-cell__index {
-    text-align: center;
     padding: 0;
   }
 
   &.vtg-cell__checkbox {
-    // text-align: center;
-
     .vtg-cell__checkbox-field {
       margin-left: 4px;
     }

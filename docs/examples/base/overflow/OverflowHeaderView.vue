@@ -1,19 +1,12 @@
 <template>
   <div class="base-view">
-    <div style="width: 100%; height: 600px; border: 2px solid var(--color-border)">
-      <Grid
-        :columns="columns"
-        :list="list"
-        :options="{
-          selection: true,
-          border: true,
-        }"
-      ></Grid>
+    <div style="width: 100%; height: 600px; border: 2px solid var(--el-color-border)">
+      <Grid :columns="columns" :list="list" :options="{ textOverflowHeader: 'title' }"></Grid>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import { Grid, type ListItem, type Column } from 'vue-virt-grid';
+import { Grid, type Column, type ListItem } from 'vue-virt-grid';
 
 const generateColumns = (length = 10, prefix = 'field-', props?: any) =>
   Array.from({ length }).map((_, columnIndex) => ({
@@ -23,7 +16,7 @@ const generateColumns = (length = 10, prefix = 'field-', props?: any) =>
     width: 200,
   }));
 
-const generateList = (columns: ReturnType<typeof generateColumns>, length = 20, prefix = 'row-') =>
+const generateList = (columns: ReturnType<typeof generateColumns>, length = 200, prefix = 'row-') =>
   Array.from({ length }).map((_, rowIndex) => {
     return columns.reduce(
       (rowData, column, columnIndex) => {
@@ -37,12 +30,10 @@ const generateList = (columns: ReturnType<typeof generateColumns>, length = 20, 
     );
   });
 
-const columns: Column[] = [
-  { type: 'index', width: 50, fixed: 'left', title: '#', index: (index: number) => {} },
-  { type: 'checkbox', width: 50, fixed: 'left' },
-  ...generateColumns(20),
-];
-const list: ListItem[] = generateList(columns, 5000);
+const columns: Column[] = [...generateColumns(10)];
+const list: ListItem[] = generateList(columns, 20);
+
+columns[1].title = '我是一个超超超超超超超超超长的标题内容';
 </script>
 <style lang="scss">
 .base-view {

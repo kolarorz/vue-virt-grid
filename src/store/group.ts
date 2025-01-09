@@ -1,8 +1,8 @@
 import { reactive } from 'vue';
 import type { GridStore } from '.';
-import { CellType, type ListItem } from '../type';
+import { CellType, type ListItem } from '@/src/type';
 import { nanoid } from 'nanoid';
-import { useTableEvent } from '../hooks/useEvent/useTableEvent';
+import { useTableEvent } from '@/src/hooks/useEvent/useTableEvent';
 
 export class GridGroup {
   constructor(private store: GridStore) {

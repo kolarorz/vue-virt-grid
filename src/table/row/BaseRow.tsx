@@ -3,12 +3,12 @@ import { useGridStore } from '@/src/store';
 import { CellType, type ColumnItem, type ListItem } from '@/src/type';
 import { getMergeInfo } from '@/src/utils/merge';
 import { useObserverItem } from 'vue-virt-list';
-import TreeCell from '@/src/grid-cell/TreeCell.vue';
-import TextCell from '@/src/grid-cell/TextCell.vue';
-import IndexCell from '@/src/grid-cell/IndexCell.vue';
-import CheckboxCell from '@/src/grid-cell/CheckboxCell.vue';
-import RadioCell from '@/src/grid-cell/RadioCell.vue';
-import ExpandCell from '@/src/grid-cell/ExpandCell.vue';
+import TreeCell from '@/src/table/cell/TreeCell.vue';
+import TextCell from '@/src/table/cell/TextCell.vue';
+import IndexCell from '@/src/table/cell/IndexCell.vue';
+import CheckboxCell from '@/src/table/cell/CheckboxCell.vue';
+import RadioCell from '@/src/table/cell/RadioCell.vue';
+import ExpandCell from '@/src/table/cell/ExpandCell.vue';
 
 export default defineComponent({
   name: 'Row',
@@ -127,29 +127,40 @@ export default defineComponent({
     const cls = {
       leftFixed: (column: ColumnItem) => [
         'vtg-td',
+        `vtg-td--${column?.align ?? gridStore.getState('align') ?? 'left'}`,
+        `vtg-td--${column?.verticalAlign ?? gridStore.getState('verticalAlign') ?? 'middle'}`,
+        gridStore.getState('textOverflow') ? 'vtg-td--text-ellipsis' : '',
+
         'is-fixed',
         'is-fixed--left',
         column._id === selectColId.value && 'current-column',
-        gridStore.interactionModule.getSelectionClass(props.rowIndex, column),
+        // gridStore.interactionModule.getSelectionClass(props.rowIndex, column),
         getCellClass(column),
         column.className,
       ],
       leftPadding: () => ['vtg-td'],
       main: (column: ColumnItem) => [
         'vtg-td',
-        gridStore.getState('showOverflow') && `overflow-${gridStore.getState('showOverflow')}`,
+        `vtg-td--${column?.align ?? gridStore.getState('align') ?? 'left'}`,
+        `vtg-td--${column?.verticalAlign ?? gridStore.getState('verticalAlign') ?? 'middle'}`,
+        gridStore.getState('textOverflow') ? 'vtg-td--text-ellipsis' : '',
+
         column._id === selectColId.value && 'current-column',
-        gridStore.interactionModule.getSelectionClass(props.rowIndex, column),
+        // gridStore.interactionModule.getSelectionClass(props.rowIndex, column),
         getCellClass(column),
         column.className,
       ],
       rightPadding: () => ['vtg-td'],
       rightFixed: (column: ColumnItem) => [
         'vtg-td',
+        `vtg-td--${column?.align ?? gridStore.getState('align') ?? 'left'}`,
+        `vtg-td--${column?.verticalAlign ?? gridStore.getState('verticalAlign') ?? 'middle'}`,
+        gridStore.getState('textOverflow') ? 'vtg-td--text-ellipsis' : '',
+
         'is-fixed',
         'is-fixed--right',
         column._id === selectColId.value && 'current-column',
-        gridStore.interactionModule.getSelectionClass(props.rowIndex, column),
+        // gridStore.interactionModule.getSelectionClass(props.rowIndex, column),
         getCellClass(column),
         column.className,
       ],
@@ -193,9 +204,7 @@ export default defineComponent({
           <td
             key={`${watchData.renderKey}-${rowIndex}-${colIndex}`}
             class={cls.leftFixed(column)}
-            style={`text-align: ${column.align}; left: ${
-              headerCellInfo[column._id].fixOffset
-            }px; ${getCellStyle(column)}`}
+            style={`left: ${headerCellInfo[column._id].fixOffset}px; ${getCellStyle(column)}`}
             data-rowidx={rowIndex}
             data-colidx={colIndex}
           >

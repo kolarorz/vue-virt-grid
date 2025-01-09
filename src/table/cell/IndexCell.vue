@@ -5,6 +5,7 @@
 </template>
 <script setup lang="ts">
 import type { ListItem, ColumnItem } from '@/src/type';
+
 const props = defineProps<{
   rowIndex: number;
   row: ListItem;
