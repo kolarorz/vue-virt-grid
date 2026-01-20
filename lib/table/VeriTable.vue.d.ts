@@ -71,6 +71,10 @@ declare const _default: __VLS_WithTemplateSlots<import("vue").DefineComponent<__
         areas: import("@/src/type").SelectedCells[][];
         cells: import("@/src/type").SelectedCells[];
     }) => void;
+    sortChange: (data: {
+        column: Column | null;
+        direction: "ascend" | "descend" | null;
+    }) => void;
 }, string, import("vue").PublicProps, Readonly<import("vue").ExtractPropTypes<__VLS_WithDefaults<__VLS_TypePropsToRuntimeProps<{
     columns: Column[];
     list: any[];
@@ -80,6 +84,18 @@ declare const _default: __VLS_WithTemplateSlots<import("vue").DefineComponent<__
     list: () => never[];
     options: () => {};
 }>>> & {
+    onExpandChange?: ((data: {
+        rowKey: string;
+        rowKeys: string[];
+    }) => any) | undefined;
+    onBoxSelection?: ((data: {
+        areas: import("@/src/type").SelectedCells[][];
+        cells: import("@/src/type").SelectedCells[];
+    }) => any) | undefined;
+    onSortChange?: ((data: {
+        column: Column | null;
+        direction: "ascend" | "descend" | null;
+    }) => any) | undefined;
     onCellClick?: ((data: {
         event: Event;
         column: Column;
@@ -134,14 +150,6 @@ declare const _default: __VLS_WithTemplateSlots<import("vue").DefineComponent<__
         event: Event;
         column: Column;
         columnIndex: number;
-    }) => any) | undefined;
-    onExpandChange?: ((data: {
-        rowKey: string;
-        rowKeys: string[];
-    }) => any) | undefined;
-    onBoxSelection?: ((data: {
-        areas: import("@/src/type").SelectedCells[][];
-        cells: import("@/src/type").SelectedCells[];
     }) => any) | undefined;
 }, {
     list: any[];

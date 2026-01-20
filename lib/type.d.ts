@@ -47,6 +47,13 @@ export type Column = {
             id: string;
             direction: 'ascend' | 'descend';
         }) => number) | boolean;
+        sortMode?: 'button' | 'toggle';
+        sortOnHeaderClick?: boolean;
+        sortIcon?: (data: {
+            direction: 'ascend' | 'descend';
+            isActive: boolean;
+            onClick: () => void;
+        }) => VNode | JSX.Element;
     };
     options?: {
         key: string;
@@ -113,7 +120,8 @@ export declare enum HeaderEventEnum {
 }
 export declare enum TableEventEnum {
     ExpandChange = "expandChange",
-    BoxSelection = "boxSelection"
+    BoxSelection = "boxSelection",
+    SortChange = "sortChange"
 }
 export type HeaderEmits = {
     (eventName: HeaderEventEnum.HeaderClick, data: {
@@ -185,6 +193,10 @@ export type TableEmits = {
         areas: SelectedCells[][];
         cells: SelectedCells[];
     }): void;
+    (eventName: TableEventEnum.SortChange, data: {
+        column: Column | null;
+        direction: 'ascend' | 'descend' | null;
+    }): void;
 };
 export interface SelectedCells {
     row: ListItem;
@@ -217,6 +229,14 @@ export interface TableOptions {
         columnId: string;
         sort: 'desc' | 'asc';
     }[];
+    defaultSort?: {
+        field: string;
+        order: 'ascend' | 'descend';
+        sorter?: (a: ListItem, b: ListItem, extra: {
+            field: string;
+            direction: 'ascend' | 'descend';
+        }) => number;
+    };
     headerRowClassName?: (data: {
         row: Column[];
         rowIndex: number;

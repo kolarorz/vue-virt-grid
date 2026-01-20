@@ -1,5 +1,5 @@
 import type { VNode } from 'vue';
-import type { Column, ListItem } from '@/src/type';
+import type { Column, ListItem, TdData } from '@/src/type';
 declare const _default: __VLS_WithTemplateSlots<import("vue").DefineComponent<__VLS_TypePropsToRuntimeProps<Column>, {}, unknown, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, {}, string, import("vue").PublicProps, Readonly<import("vue").ExtractPropTypes<__VLS_TypePropsToRuntimeProps<Column>>>, {}, {}>, Readonly<{
     header?: ((data: {
         column: Column;
@@ -8,6 +8,13 @@ declare const _default: __VLS_WithTemplateSlots<import("vue").DefineComponent<__
         row: ListItem;
         column: Column;
     }) => VNode[]) | undefined;
+    cover?: ((data: TdData) => VNode[]) | undefined;
+    dropdown?: ((data: TdData) => VNode[]) | undefined;
+    sortIcon?: ((data: {
+        direction: 'ascend' | 'descend';
+        isActive: boolean;
+        onClick: () => void;
+    }) => VNode[]) | undefined;
 }> & {
     header?: ((data: {
         column: Column;
@@ -15,6 +22,13 @@ declare const _default: __VLS_WithTemplateSlots<import("vue").DefineComponent<__
     default?: ((data: {
         row: ListItem;
         column: Column;
+    }) => VNode[]) | undefined;
+    cover?: ((data: TdData) => VNode[]) | undefined;
+    dropdown?: ((data: TdData) => VNode[]) | undefined;
+    sortIcon?: ((data: {
+        direction: 'ascend' | 'descend';
+        isActive: boolean;
+        onClick: () => void;
     }) => VNode[]) | undefined;
 }>;
 export default _default;

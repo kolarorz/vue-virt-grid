@@ -91,6 +91,10 @@ export declare class GridStore {
         };
     }>;
     state: import("vue").ShallowRef<Required<Pick<TableOptions, "align" | "textOverflowHeader" | "rowKey" | "minRowHeight" | "merges" | "groupConfig" | "headerAlign" | "verticalAlign" | "headerVerticalAlign" | "border" | "stripe" | "showTreeLine" | "selection" | "showHeader" | "textOverflow" | "highlightHoverRow" | "highlightHoverCol" | "highlightSelectRow" | "highlightSelectCol" | "highlightSelectCell" | "defaultExpandAll" | "headerRowClassName" | "headerRowStyle" | "headerCellClassName" | "headerCellStyle" | "rowClassName" | "rowStyle" | "cellClassName" | "cellStyle">>>;
+    sortState: {
+        sortColumnId: string | null;
+        sortDirection: "ascend" | "descend" | null;
+    };
     popperModule: PopperStore;
     mergeModule: GridMerges;
     interactionModule: GridInteraction;
@@ -124,7 +128,18 @@ export declare class GridStore {
     calcGridScrollingStatus(scrollLeft: number, scrollWidth: number, clientWidth: number): void;
     calcFixedShadow(scrollLeft: number, scrollWidth: number, clientWidth: number): void;
     initOptions(options: TableOptions): void;
-    initDataList(list: ListItem[]): void;
+    initDataList(list: ListItem[], preserveScroll?: boolean): void;
+    defaultSortConfig: TableOptions['defaultSort'];
+    /**
+     * 设置默认排序配置
+     */
+    setDefaultSort(config: TableOptions['defaultSort']): void;
+    /**
+     * 应用默认排序
+     * 优先使用全局 defaultSort 配置，其次检查列的 sortOrder 配置
+     */
+    applyDefaultSort(): void;
+    sortData(columnId: string, direction: 'ascend' | 'descend'): void;
 }
 export declare const useGridStore: (props?: GridProps) => GridStore;
 export {};

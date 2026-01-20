@@ -1,11 +1,11 @@
 import type { ListItem, ColumnItem } from '@/src/type';
 declare const _default: import("vue").DefineComponent<__VLS_TypePropsToRuntimeProps<{
-    rowIndex: number;
-    row: ListItem;
+    rowIndex?: number | undefined;
+    row?: ListItem;
     column: ColumnItem;
 }>, {}, unknown, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, {}, string, import("vue").PublicProps, Readonly<import("vue").ExtractPropTypes<__VLS_TypePropsToRuntimeProps<{
-    rowIndex: number;
-    row: ListItem;
+    rowIndex?: number | undefined;
+    row?: ListItem;
     column: ColumnItem;
 }>>>, {}, {}>;
 export default _default;

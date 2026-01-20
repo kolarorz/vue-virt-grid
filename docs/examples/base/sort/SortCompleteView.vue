@@ -561,6 +561,39 @@
         />
 
         <GridTableColumn
+          field="departmentSelect"
+          title="部门选择器"
+          :width="180"
+          :resizable="true"
+          :minWidth="140"
+          :maxWidth="250"
+          :sort="{
+            sortDirections: ['ascend', 'descend'],
+            sortOrder: false,
+            sorter: true,
+            sortMode: 'button',
+          }"
+        >
+          <template #cover="{ row }">
+            <ElSelect
+              v-model="row.departmentSelect"
+              size="small"
+              style="width: 100%;"
+              placeholder="请选择部门"
+              filterable
+              clearable
+            >
+              <ElOption
+                v-for="dept in departments"
+                :key="dept"
+                :label="dept"
+                :value="dept"
+              />
+            </ElSelect>
+          </template>
+        </GridTableColumn>
+
+        <GridTableColumn
           field="actions"
           title="操作"
           :width="180"
@@ -601,10 +634,12 @@ import {
 } from 'element-plus';
 import 'element-plus/dist/index.css';
 
+// 部门选项
+const departments = ['技术部', '产品部', '设计部', '运营部', '市场部', '人事部', '财务部'];
+
 const generateList = (length = 100) =>
   Array.from({ length }).map((_, rowIndex) => {
     const names = ['张三', '李四', '王五', '赵六', '钱七', '孙八', '周九', '吴十', '郑十一', '王十二'];
-    const departments = ['技术部', '产品部', '设计部', '运营部', '市场部', '人事部', '财务部'];
     const statuses = ['在职', '离职', '试用期'];
     const cities = ['北京', '上海', '广州', '深圳', '杭州', '成都'];
     const tags = ['前端', '后端', '全栈', '架构师', '高级', '资深', '专家'];
@@ -648,6 +683,7 @@ const generateList = (length = 100) =>
       radioValue: rowIndex % 3 === 0 ? 'radio1' : rowIndex % 3 === 1 ? 'radio2' : 'radio3',
       switchValue: rowIndex % 2 === 0,
       dateValue: `202${rowIndex % 4}-${String((rowIndex % 12) + 1).padStart(2, '0')}-${String((rowIndex % 28) + 1).padStart(2, '0')}`,
+      departmentSelect: departments[rowIndex % departments.length], // 用于部门选择器
     };
   });
 
