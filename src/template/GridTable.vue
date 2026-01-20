@@ -1,5 +1,5 @@
 <template>
-  <Grid :columns="columns" v-bind="attrs">
+  <Grid :columns="columns" :list="list" :options="options">
     <template #empty>
       <slot name="empty"></slot>
     </template>
@@ -17,6 +17,7 @@ import {
   type RowEmits,
   type TableEmits,
   type TdData,
+  type TableOptions,
 } from '@/src/type';
 
 const props = defineProps<{
@@ -28,6 +29,16 @@ const props = defineProps<{
   merges?: MergeCell[];
   selection?: boolean;
   groupConfig?: { columnId: string; sort: 'desc' | 'asc' }[];
+  // 默认排序配置
+  defaultSort?: {
+    field: string;
+    order: 'ascend' | 'descend';
+    sorter?: (
+      a: ListItem,
+      b: ListItem,
+      extra: { field: string; direction: 'ascend' | 'descend' },
+    ) => number;
+  };
 
   border: boolean;
   stripe: boolean;
@@ -41,11 +52,21 @@ const slots = defineSlots<{
 defineEmits<CellEmits & RowEmits & HeaderEmits & TableEmits>();
 
 const instance = getCurrentInstance();
-const attrs = computed(() => {
+const options = computed<TableOptions>(() => {
+  const instanceAttrs = instance?.attrs || {};
   return {
-    ...props,
-    ...instance?.attrs,
-  };
+    ...instanceAttrs,
+    rowKey: props.rowKey,
+    minRowHeight: props.minRowHeight,
+    defaultExpandAll: props.defaultExpandAll,
+    merges: props.merges,
+    selection: props.selection,
+    groupConfig: props.groupConfig,
+    defaultSort: props.defaultSort,
+    border: props.border,
+    stripe: props.stripe,
+    showTreeLine: props.showTreeLine,
+  } as TableOptions;
 });
 
 function setupNode(node: VNode) {
@@ -80,11 +101,47 @@ function initColumn(columnNode: VNode) {
         }
       : undefined,
   };
-  const children =
-    slots.default?.({
-      row: {},
-      column: {},
-    }) ?? ([] as VNode[]);
+  
+  let children: VNode[] = [];
+  if (slots.default) {
+    try {
+      const createSafeMockRow = (): ListItem => {
+        const baseMock: any = {
+          id: '',
+          name: '',
+          [field]: '',
+        };
+        
+        const createProxy = (obj: any): any => {
+          return new Proxy(obj, {
+            get(target, prop) {
+              if (prop in target) {
+                const value = target[prop];
+                if (value && typeof value === 'object' && !Array.isArray(value)) {
+                  return createProxy(value);
+                }
+                return value;
+              }
+              return '';
+            },
+          });
+        };
+        
+        return createProxy(baseMock) as ListItem;
+      };
+      
+      const mockRow = createSafeMockRow();
+      const mockColumn = columnConfig as Column;
+      children = slots.default({
+        row: mockRow,
+        column: mockColumn,
+      }) ?? [];
+    } catch (error) {
+      console.warn('Error while initializing column slot:', error);
+      children = [];
+    }
+  }
+  
   children.forEach((node: VNode) => {
     if (isGridTableColumnNode(node)) {
       if (!columnConfig.children) columnConfig.children = [];
@@ -97,6 +154,33 @@ function initColumn(columnNode: VNode) {
     columnConfig.cellRender = (tdData: TdData) => {
       return slots.default?.(tdData)?.[0];
     };
+  }
+
+  // 支持 cover slot 用于 cellCoverRender
+  if (slots.cover) {
+    columnConfig.cellCoverRender = (tdData: TdData) => {
+      return slots.cover?.(tdData)?.[0];
+    };
+  }
+
+  // 支持 dropdown slot 用于 cellDropdownRender
+  if (slots.dropdown) {
+    columnConfig.cellDropdownRender = (tdData: TdData) => {
+      return slots.dropdown?.(tdData)?.[0];
+    };
+  }
+
+  // 支持 sortIcon slot 用于自定义排序图标
+  if (slots.sortIcon && columnConfig.sort) {
+    if (!columnConfig.sort.sortIcon) {
+      columnConfig.sort.sortIcon = (data: {
+        direction: 'ascend' | 'descend';
+        isActive: boolean;
+        onClick: () => void;
+      }) => {
+        return slots.sortIcon?.(data)?.[0];
+      };
+    }
   }
 
   return columnConfig;

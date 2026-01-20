@@ -10,6 +10,11 @@ defineProps<Column>();
 defineSlots<{
   header?: (data: { column: Column }) => VNode[];
   default?: (data: { row: ListItem; column: Column }) => VNode[];
+  sortIcon?: (data: {
+    direction: 'ascend' | 'descend';
+    isActive: boolean;
+    onClick: () => void;
+  }) => VNode[];
 }>();
 </script>
 <script lang="ts">
