@@ -74,6 +74,13 @@ export class GridColumn {
     this.flattedColumns = flattedColumns;
     this.originColumns = originColumns;
 
+    console.log('[GridColumn.setColumns] rightFixedColumns:', rightFixedColumns.map(col => ({
+      _id: col._id,
+      field: col.field,
+      width: col.width,
+      fixed: col.fixed,
+    })));
+
     this.columnState.fixedInfo = fixedInfo;
     this.columnsInfo.headerCellInfo = headerCellInfo;
     this.columnsInfo.leftFixedColumns = leftFixedColumns;

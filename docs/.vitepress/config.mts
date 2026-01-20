@@ -72,6 +72,7 @@ export default defineConfig({
                 { text: '索引', link: '/examples/base/index-view/' },
                 { text: '单选框', link: '/examples/base/radio/' },
                 { text: '复选框', link: '/examples/base/checkbox/' },
+                { text: '排序', link: '/examples/base/sort/' },
                 { text: '列宽拖拽', link: '/examples/column/' },
                 { text: '自定义类/样式', link: '/examples/custom-class-style/' },
               ],

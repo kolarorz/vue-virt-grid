@@ -1,4 +1,4 @@
-import { reactive, shallowReactive, ref, inject, provide, shallowRef } from 'vue';
+import { reactive, shallowReactive, ref, inject, provide, shallowRef, nextTick } from 'vue';
 import {
   type Column,
   type ListItem,
@@ -143,6 +143,11 @@ export class GridStore {
 
   state = shallowRef<GridState>(defaultGridOptions as GridState);
 
+  sortState = reactive({
+    sortColumnId: null as string | null,
+    sortDirection: null as 'ascend' | 'descend' | null,
+  });
+
   // 内部共享模块
   popperModule = new PopperStore(this);
   mergeModule = new GridMerges(this);
@@ -280,15 +285,175 @@ export class GridStore {
       cellRender: options.cellRender,
       cellDropdownRender: options.cellDropdownRender,
     });
+
+    // 设置默认排序配置
+    if (options.defaultSort) {
+      this.setDefaultSort(options.defaultSort);
+    }
   }
 
-  initDataList(list: ListItem[]) {
+  initDataList(list: ListItem[], preserveScroll?: boolean) {
+    let scrollTop = 0;
+    if (preserveScroll && this.clientEl) {
+      scrollTop = this.clientEl.scrollTop;
+    }
+    
     this.setList([]);
-    setTimeout(() => {
+    setTimeout(async () => {
       this.setOriginList(list);
+      
+      // 应用默认排序（如果配置了且当前没有排序状态）
+      this.applyDefaultSort();
+      
       const flattenList = this.groupModule.generateFlatList(this.originList);
       this.setList(flattenList || []);
+      
+      if (preserveScroll && this.clientEl && scrollTop > 0) {
+        await nextTick();
+        this.clientEl.scrollTop = scrollTop;
+      }
     });
+  }
+
+  // 全局默认排序配置
+  defaultSortConfig: TableOptions['defaultSort'] = undefined;
+
+  /**
+   * 设置默认排序配置
+   */
+  setDefaultSort(config: TableOptions['defaultSort']) {
+    this.defaultSortConfig = config;
+  }
+
+  /**
+   * 应用默认排序
+   * 优先使用全局 defaultSort 配置，其次检查列的 sortOrder 配置
+   */
+  applyDefaultSort() {
+    // 如果已经有排序状态，不应用默认排序
+    if (this.sortState.sortColumnId) {
+      return;
+    }
+
+    // 优先使用全局 defaultSort 配置
+    if (this.defaultSortConfig) {
+      const { field, order, sorter: globalSorter } = this.defaultSortConfig;
+      
+      // 查找对应的列
+      const column = this.columnModule.flattedColumns.find((col) => col.field === field);
+      if (column) {
+        // 设置排序状态
+        this.sortState.sortColumnId = column._id;
+        this.sortState.sortDirection = order;
+        
+        // 确定使用的排序函数：全局配置 > 列配置 > 默认排序
+        let sortFn: ((a: ListItem, b: ListItem) => number) | null = null;
+        
+        if (globalSorter) {
+          // 使用全局配置的排序函数
+          sortFn = (a, b) => globalSorter(a, b, { field, direction: order });
+        } else if (column.sort?.sorter) {
+          // 使用列配置的排序函数
+          const columnSorter = column.sort.sorter;
+          if (typeof columnSorter === 'function') {
+            sortFn = (a, b) => columnSorter(a, b, { id: column._id, direction: order });
+          } else if (columnSorter === true) {
+            // 使用默认排序
+            sortFn = (a, b) => {
+              const aVal = a[field];
+              const bVal = b[field];
+              if (aVal === bVal) return 0;
+              return aVal > bVal ? 1 : -1;
+            };
+          }
+        } else {
+          // 默认排序
+          sortFn = (a, b) => {
+            const aVal = a[field];
+            const bVal = b[field];
+            if (aVal === bVal) return 0;
+            return aVal > bVal ? 1 : -1;
+          };
+        }
+        
+        if (sortFn) {
+          const sortedList = [...this.originList].sort((a, b) => {
+            const result = sortFn!(a, b);
+            return order === 'ascend' ? result : -result;
+          });
+          this.setOriginList(sortedList);
+        }
+        return;
+      }
+    }
+
+    // 如果没有全局配置，查找第一个有 sortOrder 配置的列
+    const columnWithDefaultSort = this.columnModule.flattedColumns.find((col) => {
+      if (!col.sort) return false;
+      const sortOrder = col.sort.sortOrder;
+      return sortOrder === 'ascend' || sortOrder === 'descend';
+    });
+
+    if (columnWithDefaultSort && columnWithDefaultSort.sort) {
+      const sortOrder = columnWithDefaultSort.sort.sortOrder;
+      if (sortOrder === 'ascend' || sortOrder === 'descend') {
+        // 设置排序状态
+        this.sortState.sortColumnId = columnWithDefaultSort._id;
+        this.sortState.sortDirection = sortOrder;
+        
+        // 执行排序
+        const sorter = columnWithDefaultSort.sort.sorter;
+        if (typeof sorter === 'boolean' && sorter) {
+          const sortedList = [...this.originList].sort((a, b) => {
+            const aVal = a[columnWithDefaultSort.field];
+            const bVal = b[columnWithDefaultSort.field];
+            if (aVal === bVal) return 0;
+            const result = aVal > bVal ? 1 : -1;
+            return sortOrder === 'ascend' ? result : -result;
+          });
+          this.setOriginList(sortedList);
+        } else if (typeof sorter === 'function') {
+          const sortedList = [...this.originList].sort((a, b) => {
+            const result = sorter(a, b, { id: columnWithDefaultSort._id, direction: sortOrder });
+            return sortOrder === 'ascend' ? result : -result;
+          });
+          this.setOriginList(sortedList);
+        }
+      }
+    }
+  }
+
+  sortData(columnId: string, direction: 'ascend' | 'descend') {
+    const column = this.columnModule.flattedColumns.find((col) => col._id === columnId);
+    if (!column || !column.sort) return;
+
+    if (this.sortState.sortColumnId === columnId && this.sortState.sortDirection === direction) {
+      this.sortState.sortColumnId = null;
+      this.sortState.sortDirection = null;
+      this.initDataList(this.originList, true);
+      return;
+    }
+
+    this.sortState.sortColumnId = columnId;
+    this.sortState.sortDirection = direction;
+
+    const sorter = column.sort.sorter;
+    if (typeof sorter === 'boolean' && sorter) {
+      const sortedList = [...this.originList].sort((a, b) => {
+        const aVal = a[column.field];
+        const bVal = b[column.field];
+        if (aVal === bVal) return 0;
+        const result = aVal > bVal ? 1 : -1;
+        return direction === 'ascend' ? result : -result;
+      });
+      this.initDataList(sortedList, true);
+    } else if (typeof sorter === 'function') {
+      const sortedList = [...this.originList].sort((a, b) => {
+        const result = sorter(a, b, { id: columnId, direction });
+        return direction === 'ascend' ? result : -result;
+      });
+      this.initDataList(sortedList, true);
+    }
   }
 }
 

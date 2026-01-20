@@ -68,6 +68,13 @@ export type Column = {
           extra: { id: string; direction: 'ascend' | 'descend' },
         ) => number)
       | boolean;
+    sortMode?: 'button' | 'toggle';
+    sortOnHeaderClick?: boolean;
+    sortIcon?: (data: {
+      direction: 'ascend' | 'descend';
+      isActive: boolean;
+      onClick: () => void;
+    }) => VNode | JSX.Element;
   };
 
   options?: { key: string; value: string; bg?: string; color?: string }[];
@@ -153,6 +160,7 @@ export enum HeaderEventEnum {
 export enum TableEventEnum {
   ExpandChange = 'expandChange',
   BoxSelection = 'boxSelection',
+  SortChange = 'sortChange',
 }
 
 // 表头事件
@@ -265,6 +273,13 @@ export type TableEmits = {
       cells: SelectedCells[];
     },
   ): void;
+  (
+    eventName: TableEventEnum.SortChange,
+    data: {
+      column: Column | null;
+      direction: 'ascend' | 'descend' | null;
+    },
+  ): void;
 };
 
 export interface SelectedCells {
@@ -314,6 +329,19 @@ export interface TableOptions {
   merges?: MergeCell[];
   // 分组信息
   groupConfig?: { columnId: string; sort: 'desc' | 'asc' }[];
+  // 默认排序配置
+  defaultSort?: {
+    // 排序的列字段
+    field: string;
+    // 排序方向
+    order: 'ascend' | 'descend';
+    // 自定义排序函数（可选，如果不提供则使用列的 sorter 或默认排序）
+    sorter?: (
+      a: ListItem,
+      b: ListItem,
+      extra: { field: string; direction: 'ascend' | 'descend' },
+    ) => number;
+  };
   // 表头行自定义类
   headerRowClassName?: (data: { row: Column[]; rowIndex: number }) => string;
   // 表头行自定义样式

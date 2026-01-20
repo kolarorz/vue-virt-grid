@@ -83,11 +83,17 @@
   &.vtg-root--border {
     border-color: var(--#{$prefix}-border-color);
     table#vtg-table {
-      th.vtg-th {
-        border-color: var(--#{$prefix}-border-color);
+      thead.vtg-header {
+        th.vtg-th {
+          border-color: var(--#{$prefix}-border-color);
+          border-right: var(--#{$prefix}-border) !important;
+        }
       }
-      td.vtg-td {
-        border-color: var(--#{$prefix}-border-color);
+      tbody.vtg-body {
+        td.vtg-td {
+          border-color: var(--#{$prefix}-border-color);
+          border-right: var(--#{$prefix}-border) !important;
+        }
       }
     }
   }

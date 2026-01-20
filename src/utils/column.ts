@@ -65,10 +65,13 @@ const genColumnsWidth = (
   let currCols = columns;
   // TODO: 优化计算方式，不需要反转
   // 右固定列需要反转一下进行计算
-  if (isRight) currCols = columns.reverse();
+  if (isRight) currCols = [...columns].reverse();
   const res = currCols.map((column) => {
     const colInfo = headerCellInfo[column._id];
-    if (!colInfo) return column;
+    if (!colInfo) {
+      console.warn('[genColumnsWidth] colInfo not found for column:', column._id, column);
+      return column;
+    }
     if (colInfo.children && colInfo.children.length > 0) {
       const { offset: width, maxWidth } = genColumnsWidth(
         column.children,
@@ -85,15 +88,26 @@ const genColumnsWidth = (
         fixOffset: currOffset,
       };
       currOffset = width;
+      if (isRight) {
+        console.log('[genColumnsWidth-right] parent column:', column._id, 'width:', column.width, 'fixOffset:', currOffset);
+      }
       return col;
     } else {
+      const columnWidth = column.width!;
+      if (isRight && (!columnWidth || columnWidth === 0)) {
+        console.error('[genColumnsWidth-right] column width is 0 or undefined:', column._id, column.field, 'width:', columnWidth);
+      }
       headerCellInfo[column._id].fixOffset = currOffset;
-      levelWidth += column.width!;
-      currOffset += column.width!;
-      return {
+      levelWidth += columnWidth;
+      currOffset += columnWidth;
+      const result = {
         ...column,
-        fixOffset: currOffset - column.width!,
+        fixOffset: currOffset - columnWidth,
       };
+      if (isRight) {
+        console.log('[genColumnsWidth-right] leaf column:', column._id, column.field, 'width:', columnWidth, 'fixOffset:', result.fixOffset, 'currOffset:', currOffset);
+      }
+      return result;
     }
   });
   // 右侧固定时渲染顺序需要再进行反转
@@ -273,9 +287,16 @@ export const formatColumns = (originColumns: Column[]): FormatColumns => {
   );
   // 计算右侧fixed的值
   let rightReduce = 0;
+  console.log('[formatColumns] rightFixedColumns length:', rightFixedColumns.length);
   for (let i = rightFixedColumns.length - 1; i >= 0; i--) {
-    headerCellInfo[rightFixedColumns[i]._id].right = rightReduce;
-    rightReduce += rightFixedColumns[i].width!;
+    const col = rightFixedColumns[i];
+    const colWidth = col.width!;
+    if (!colWidth || colWidth === 0) {
+      console.error('[formatColumns] rightFixedColumns width is 0 or undefined:', col._id, col.field, 'width:', colWidth, 'index:', i);
+    }
+    headerCellInfo[col._id].right = rightReduce;
+    rightReduce += colWidth;
+    console.log('[formatColumns] rightFixedColumns:', col._id, col.field, 'width:', colWidth, 'right:', rightReduce - colWidth, 'totalRight:', rightReduce);
   }
 
   const { leftFixed, rightFixed, fixedHeaderCols } = calcFixedColumnsOffset(

@@ -19,7 +19,11 @@
         <colgroup :key="gridStore.watchData.renderKey">
           <col v-for="column in leftFixedColumns" :key="column._id" :width="column.width" />
           <col v-for="column in centerNormalColumns" :key="column._id" :width="column.width" />
-          <col v-for="column in rightFixedColumns" :key="column._id" :width="column.width" />
+          <col
+            v-for="(column, index) in rightFixedColumns"
+            :key="column._id"
+            :width="column.width"
+          />
         </colgroup>
 
         <thead

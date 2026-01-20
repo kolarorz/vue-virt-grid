@@ -312,12 +312,27 @@ export default defineComponent({
       for (let colIndex = 0; colIndex < rightFixedColumns.length; colIndex++) {
         const column = rightFixedColumns[colIndex];
         const actualColIndex = colIndex + leftFixedColumns.length + centerNormalColumns.length;
+        const colInfo = headerCellInfo[column._id];
+        const fixOffset = colInfo?.fixOffset;
+        const colWidth = column.width;
+        
+        if (rowIndex === 0) {
+          if (!colWidth || colWidth === 0) {
+            console.error('[BaseRow-rightFixed] column width is 0 or undefined:', column._id, column.field, 'width:', colWidth, 'colIndex:', colIndex, 'column:', column);
+          }
+          if (fixOffset === undefined || fixOffset === null) {
+            console.error('[BaseRow-rightFixed] fixOffset is undefined:', column._id, column.field, 'fixOffset:', fixOffset, 'colInfo:', colInfo);
+          } else {
+            console.log('[BaseRow-rightFixed] column:', column._id, column.field, 'width:', colWidth, 'fixOffset:', fixOffset, 'colIndex:', colIndex, 'actualColIndex:', actualColIndex, 'rightFixedColumns.length:', rightFixedColumns.length);
+          }
+        }
+        
         tds.push(
           <td
             key={`${watchData.renderKey}-${rowIndex}-${actualColIndex}`}
             class={cls.rightFixed(column)}
             style={`text-align: ${column.align}; right: ${
-              headerCellInfo[column._id].fixOffset
+              fixOffset ?? 0
             }px; ${getCellStyle(column)}`}
             data-rowidx={rowIndex}
             data-colidx={actualColIndex}
