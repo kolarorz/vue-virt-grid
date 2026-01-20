@@ -81,7 +81,7 @@ export type Column = {
   // [仅存在于column中] 自定义header渲染
   headerRender?: (column: Column) => VNode | JSX.Element;
   // [仅存在于column中] 自定义expand渲染
-  // expandRender?: (tdData: TdData) => VNode | JSX.Element;
+  expandRender?: (column: Column, row: ListItem) => VNode | JSX.Element;
 };
 
 /**

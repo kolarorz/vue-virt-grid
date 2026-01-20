@@ -57,9 +57,11 @@ const cellDataValue = computed(() => {
 });
 
 const cellValue = computed(() => {
-  return cellDataValue.value.map((key: string) => {
-    return props.column.options?.find((option) => option.key === key);
-  });
+  return cellDataValue.value
+    .map((key: string) => {
+      return props.column.options?.find((option) => option.key === key);
+    })
+    .filter((item): item is NonNullable<typeof item> => item !== undefined);
 });
 
 function handleClose(key: string) {

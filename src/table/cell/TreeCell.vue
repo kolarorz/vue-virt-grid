@@ -38,10 +38,7 @@
       </template>
     </div>
     <div class="content">
-      <component v-if="customBody" :is="customBody"></component>
-      <template v-else>
-        {{ column.field ? row[column.field] : '' }}
-      </template>
+      {{ column.field ? row[column.field] : '' }}
     </div>
   </div>
 </template>
@@ -61,10 +58,6 @@ const props = defineProps<{
 }>();
 
 const showTreeLine = computed(() => gridStore.getState('showTreeLine'));
-
-const customBody = computed(() => {
-  return props.column?.cellRender?.(props.column, props.row);
-});
 </script>
 <style lang="scss">
 .vtg-cell__title {

@@ -39,9 +39,12 @@ const props = defineProps({
 const cellValue = computed(() => {
   const cellData: string | { value: string } = props.row[props.column.field];
   const cellDataValue = isObject(cellData) ? cellData.value : cellData;
-  return cellDataValue?.split(',').map((key: string) => {
-    return props.column.options?.find((option) => option.key === key);
-  });
+  return cellDataValue
+    ?.split(',')
+    .map((key: string) => {
+      return props.column.options?.find((option) => option.key === key);
+    })
+    .filter((item): item is NonNullable<typeof item> => item !== undefined);
 });
 </script>
 
