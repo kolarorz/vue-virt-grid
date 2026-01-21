@@ -90,7 +90,7 @@ export declare class GridStore {
             end: number;
         };
     }>;
-    state: import("vue").ShallowRef<Required<Pick<TableOptions, "align" | "textOverflowHeader" | "rowKey" | "minRowHeight" | "merges" | "groupConfig" | "headerAlign" | "verticalAlign" | "headerVerticalAlign" | "border" | "stripe" | "showTreeLine" | "selection" | "showHeader" | "textOverflow" | "highlightHoverRow" | "highlightHoverCol" | "highlightSelectRow" | "highlightSelectCol" | "highlightSelectCell" | "defaultExpandAll" | "headerRowClassName" | "headerRowStyle" | "headerCellClassName" | "headerCellStyle" | "rowClassName" | "rowStyle" | "cellClassName" | "cellStyle">>>;
+    state: import("vue").ShallowRef<Required<Pick<TableOptions, "rowKey" | "minRowHeight" | "textOverflow" | "textOverflowHeader" | "showHeader" | "defaultExpandAll" | "border" | "align" | "headerAlign" | "verticalAlign" | "headerVerticalAlign" | "stripe" | "showTreeLine" | "highlightHoverRow" | "highlightHoverCol" | "highlightSelectRow" | "highlightSelectCol" | "highlightSelectCell" | "selection" | "merges" | "groupConfig" | "headerRowClassName" | "headerRowStyle" | "headerCellClassName" | "headerCellStyle" | "rowClassName" | "rowStyle" | "cellClassName" | "cellStyle">>>;
     sortState: {
         sortColumnId: string | null;
         sortDirection: "ascend" | "descend" | null;
@@ -123,7 +123,7 @@ export declare class GridStore {
     addRadioRow(row: ListItem): void;
     setState(data: GridState): void;
     setStateValue<T extends keyof GridState>(key: T, value: GridState[T]): void;
-    getState<T extends keyof GridState>(key: T): Required<Pick<TableOptions, "align" | "textOverflowHeader" | "rowKey" | "minRowHeight" | "merges" | "groupConfig" | "headerAlign" | "verticalAlign" | "headerVerticalAlign" | "border" | "stripe" | "showTreeLine" | "selection" | "showHeader" | "textOverflow" | "highlightHoverRow" | "highlightHoverCol" | "highlightSelectRow" | "highlightSelectCol" | "highlightSelectCell" | "defaultExpandAll" | "headerRowClassName" | "headerRowStyle" | "headerCellClassName" | "headerCellStyle" | "rowClassName" | "rowStyle" | "cellClassName" | "cellStyle">>[T];
+    getState<T extends keyof GridState>(key: T): Required<Pick<TableOptions, "rowKey" | "minRowHeight" | "textOverflow" | "textOverflowHeader" | "showHeader" | "defaultExpandAll" | "border" | "align" | "headerAlign" | "verticalAlign" | "headerVerticalAlign" | "stripe" | "showTreeLine" | "highlightHoverRow" | "highlightHoverCol" | "highlightSelectRow" | "highlightSelectCol" | "highlightSelectCell" | "selection" | "merges" | "groupConfig" | "headerRowClassName" | "headerRowStyle" | "headerCellClassName" | "headerCellStyle" | "rowClassName" | "rowStyle" | "cellClassName" | "cellStyle">>[T];
     initVirtualListRef(elRef: GridStore['virtualListRef']): void;
     calcGridScrollingStatus(scrollLeft: number, scrollWidth: number, clientWidth: number): void;
     calcFixedShadow(scrollLeft: number, scrollWidth: number, clientWidth: number): void;

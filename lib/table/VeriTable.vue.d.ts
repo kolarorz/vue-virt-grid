@@ -1,3 +1,4 @@
+import { GridStore } from '@/src/store';
 import { type Column, type TableOptions } from '@/src/type';
 declare const _default: __VLS_WithTemplateSlots<import("vue").DefineComponent<__VLS_WithDefaults<__VLS_TypePropsToRuntimeProps<{
     columns: Column[];
@@ -7,7 +8,35 @@ declare const _default: __VLS_WithTemplateSlots<import("vue").DefineComponent<__
     columns: () => never[];
     list: () => never[];
     options: () => {};
-}>, {}, unknown, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, {
+}>, {
+    /**
+     * 滚动到指定索引的行
+     * @param index 行索引
+     */
+    scrollToIndex: (index: number) => void;
+    /**
+     * 滚动到指定行（使行可见）
+     * @param index 行索引
+     */
+    scrollIntoView: (index: number) => void;
+    /**
+     * 滚动到顶部
+     */
+    scrollToTop: () => void;
+    /**
+     * 滚动到底部
+     */
+    scrollToBottom: () => void;
+    /**
+     * 滚动到指定偏移量
+     * @param offset 偏移量（像素）
+     */
+    scrollToOffset: (offset: number) => void;
+    /**
+     * 获取 gridStore 实例
+     */
+    getGridStore: () => GridStore;
+}, unknown, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, {
     cellClick: (data: {
         event: Event;
         column: Column;
@@ -84,17 +113,38 @@ declare const _default: __VLS_WithTemplateSlots<import("vue").DefineComponent<__
     list: () => never[];
     options: () => {};
 }>>> & {
-    onExpandChange?: ((data: {
-        rowKey: string;
-        rowKeys: string[];
+    onHeaderClick?: ((data: {
+        event: Event;
+        column: Column;
+        columnIndex: number;
     }) => any) | undefined;
-    onBoxSelection?: ((data: {
-        areas: import("@/src/type").SelectedCells[][];
-        cells: import("@/src/type").SelectedCells[];
+    onHeaderDblclick?: ((data: {
+        event: Event;
+        column: Column;
+        columnIndex: number;
     }) => any) | undefined;
-    onSortChange?: ((data: {
-        column: Column | null;
-        direction: "ascend" | "descend" | null;
+    onHeaderContextmenu?: ((data: {
+        event: Event;
+        column: Column;
+        columnIndex: number;
+    }) => any) | undefined;
+    onRowClick?: ((data: {
+        event: Event;
+        column: Column;
+        row: any;
+        rowIndex: number;
+    }) => any) | undefined;
+    onRowDblclick?: ((data: {
+        event: Event;
+        column: Column;
+        row: any;
+        rowIndex: number;
+    }) => any) | undefined;
+    onRowContextmenu?: ((data: {
+        event: Event;
+        column: Column;
+        row: any;
+        rowIndex: number;
     }) => any) | undefined;
     onCellClick?: ((data: {
         event: Event;
@@ -118,42 +168,21 @@ declare const _default: __VLS_WithTemplateSlots<import("vue").DefineComponent<__
         rowIndex: number;
         cell: string;
     }) => any) | undefined;
-    onRowClick?: ((data: {
-        event: Event;
-        column: Column;
-        row: any;
-        rowIndex: number;
+    onExpandChange?: ((data: {
+        rowKey: string;
+        rowKeys: string[];
     }) => any) | undefined;
-    onRowDblclick?: ((data: {
-        event: Event;
-        column: Column;
-        row: any;
-        rowIndex: number;
+    onBoxSelection?: ((data: {
+        areas: import("@/src/type").SelectedCells[][];
+        cells: import("@/src/type").SelectedCells[];
     }) => any) | undefined;
-    onRowContextmenu?: ((data: {
-        event: Event;
-        column: Column;
-        row: any;
-        rowIndex: number;
-    }) => any) | undefined;
-    onHeaderClick?: ((data: {
-        event: Event;
-        column: Column;
-        columnIndex: number;
-    }) => any) | undefined;
-    onHeaderDblclick?: ((data: {
-        event: Event;
-        column: Column;
-        columnIndex: number;
-    }) => any) | undefined;
-    onHeaderContextmenu?: ((data: {
-        event: Event;
-        column: Column;
-        columnIndex: number;
+    onSortChange?: ((data: {
+        column: Column | null;
+        direction: "ascend" | "descend" | null;
     }) => any) | undefined;
 }, {
-    list: any[];
     columns: Column[];
+    list: any[];
     options: TableOptions;
 }, {}>, {
     empty?(_: {}): any;

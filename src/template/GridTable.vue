@@ -1,12 +1,12 @@
 <template>
-  <Grid :columns="columns" :list="list" :options="options">
+  <Grid ref="gridRef" :columns="columns" :list="list" :options="options">
     <template #empty>
       <slot name="empty"></slot>
     </template>
   </Grid>
 </template>
 <script lang="ts" setup>
-import { computed, Fragment, render, type Component, type VNode, getCurrentInstance } from 'vue';
+import { computed, Fragment, render, ref, type Component, type VNode, getCurrentInstance } from 'vue';
 import Grid from '@/src/table/VeriTable.vue';
 import {
   type CellEmits,
@@ -201,5 +201,49 @@ const getColumns = (): Column[] => {
     });
 };
 const columns = computed(getColumns);
+
+// Grid 组件引用
+const gridRef = ref<InstanceType<typeof Grid> | null>(null);
+
+// 暴露方法给外部调用
+defineExpose({
+  /**
+   * 滚动到指定索引的行
+   * @param index 行索引
+   */
+  scrollToIndex: (index: number) => {
+    gridRef.value?.scrollToIndex(index);
+  },
+  /**
+   * 滚动到指定行（使行可见）
+   * @param index 行索引
+   */
+  scrollIntoView: (index: number) => {
+    gridRef.value?.scrollIntoView(index);
+  },
+  /**
+   * 滚动到顶部
+   */
+  scrollToTop: () => {
+    gridRef.value?.scrollToTop();
+  },
+  /**
+   * 滚动到底部
+   */
+  scrollToBottom: () => {
+    gridRef.value?.scrollToBottom();
+  },
+  /**
+   * 滚动到指定偏移量
+   * @param offset 偏移量（像素）
+   */
+  scrollToOffset: (offset: number) => {
+    gridRef.value?.scrollToOffset(offset);
+  },
+  /**
+   * 获取 gridStore 实例
+   */
+  getGridStore: () => gridRef.value?.getGridStore(),
+});
 </script>
 <style lang="scss" scoped></style>

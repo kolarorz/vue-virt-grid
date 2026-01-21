@@ -290,4 +290,45 @@ onMounted(() => {
 onBeforeUnmount(() => {
   gridStore.eventEmitter.offAll();
 });
+
+// 暴露方法给外部调用
+defineExpose({
+  /**
+   * 滚动到指定索引的行
+   * @param index 行索引
+   */
+  scrollToIndex: (index: number) => {
+    virtualListRef.scrollToIndex(index);
+  },
+  /**
+   * 滚动到指定行（使行可见）
+   * @param index 行索引
+   */
+  scrollIntoView: (index: number) => {
+    virtualListRef.scrollIntoView(index);
+  },
+  /**
+   * 滚动到顶部
+   */
+  scrollToTop: () => {
+    virtualListRef.scrollToTop();
+  },
+  /**
+   * 滚动到底部
+   */
+  scrollToBottom: () => {
+    virtualListRef.scrollToBottom();
+  },
+  /**
+   * 滚动到指定偏移量
+   * @param offset 偏移量（像素）
+   */
+  scrollToOffset: (offset: number) => {
+    virtualListRef.scrollToOffset(offset);
+  },
+  /**
+   * 获取 gridStore 实例
+   */
+  getGridStore: () => gridStore,
+});
 </script>
